@@ -9,3 +9,4 @@
 
 rootProject.name = 'packmaker'
 include('app')
+include('installer')

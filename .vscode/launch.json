@@ -12,6 +12,14 @@
             "projectName": "app",
             "console": "internalConsole",
             "vmArgs": "--module-path D:\\Documents\\Programming\\packmaker\\.javafx\\lib --add-modules javafx.controls,javafx.fxml"
+        },
+        {
+            "type": "java",
+            "name": "Installer",
+            "request": "launch",
+            "mainClass": "com.igrium.packmaker.installer.Installer",
+            "console": "internalConsole",
+            "projectName": "installer",
         }
     ]
 }
