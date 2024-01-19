@@ -4,30 +4,25 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.HttpClient.Redirect;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.List;
 
 import com.google.gson.reflect.TypeToken;
+import com.igrium.packmaker.common.WebApi;
 import com.igrium.packmaker.common.fabric.FabricWebTypes.LoaderVersion;
 import com.igrium.packmaker.common.util.JsonBodyHandler;
-import com.igrium.packmaker.common.util.WebUtils;
 
-public class FabricWebApi {
+public class FabricWebApi extends WebApi {
 
     public static final String DEFAULT_URL = "https://meta.fabricmc.net/v2/";
-    
-    private final URI baseUrl;
-    private final HttpClient httpClient = HttpClient.newBuilder()
-            .followRedirects(Redirect.ALWAYS)
-            .build();
+
 
     public FabricWebApi(URI baseUrl) {
-        this.baseUrl = baseUrl;
+        super(baseUrl);
     }
 
     public FabricWebApi(String baseUrl) {
-        this.baseUrl = WebUtils.uri(baseUrl);
+        super(baseUrl);
     }
 
     public FabricWebApi() {
@@ -54,7 +49,7 @@ public class FabricWebApi {
     public LoaderVersion latestLoaderVersion() throws IOException, InterruptedException {
         var versions = getLoaderVersions();
         for (LoaderVersion version : versions) {
-            if (version.stable) return version;
+            if (version.stable()) return version;
         }
         return null;
     }

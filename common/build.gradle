@@ -5,8 +5,10 @@ plugins {
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
     api 'com.google.code.gson:gson:2.10.1'
+    api 'com.github.Gaming32:mrpacklib:0.2'
 }

@@ -1,5 +1,5 @@
 package com.igrium.packmaker.installer;
 
-public class Installer {
+public class Config {
     
 }

@@ -17,7 +17,7 @@
             "type": "java",
             "name": "Installer",
             "request": "launch",
-            "mainClass": "com.igrium.packmaker.installer.Installer",
+            "mainClass": "com.igrium.packmaker.installer.InstallerUI",
             "console": "internalConsole",
             "projectName": "installer",
         }
