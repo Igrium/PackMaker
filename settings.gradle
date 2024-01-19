@@ -8,5 +8,6 @@
  */
 
 rootProject.name = 'packmaker'
+include('common')
 include('app')
 include('installer')
