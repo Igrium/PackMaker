@@ -13,7 +13,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.igrium.packmaker.installer.InstallerUI;
 
-public class WelcomeScreen {
+public class WelcomeScreen implements Screen {
     private final InstallerUI ui;
 
     public WelcomeScreen(InstallerUI ui) {

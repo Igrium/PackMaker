@@ -154,6 +154,7 @@ public class MrPack implements Closeable {
         
         public Path extract(Path gameDir) throws IOException {
             Path targetPath = gameDir.resolve(path);
+            Files.createDirectories(targetPath.getParent());
             try(InputStream stream = zipFile.getInputStream(entry)) {
                 Files.copy(stream, targetPath, StandardCopyOption.REPLACE_EXISTING);
             }

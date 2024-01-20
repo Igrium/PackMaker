@@ -3,10 +3,16 @@ package com.igrium.packmaker.installer;
 import java.awt.CardLayout;
 import java.awt.Container;
 import java.io.File;
+import java.nio.file.Path;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
+import com.igrium.packmaker.installer.modpack.ModpackProvider;
 import com.igrium.packmaker.installer.ui.GameFolderSelectScreen;
+import com.igrium.packmaker.installer.ui.InstallCompleteScreen;
+import com.igrium.packmaker.installer.ui.InstallingScreen;
 import com.igrium.packmaker.installer.ui.LauncherFolderSelectScreen;
 import com.igrium.packmaker.installer.ui.WelcomeScreen;
 import com.igrium.packmaker.installer.util.OSUtil;
@@ -49,6 +55,8 @@ public class InstallerUI {
     private WelcomeScreen welcomeScreen;
     private LauncherFolderSelectScreen launcherFolderSelectScreen;
     private GameFolderSelectScreen gameFolderSelectScreen;
+    private InstallingScreen installingScreen;
+    private InstallCompleteScreen completeScreen;
 
     private void init() {
         welcomeScreen = new WelcomeScreen(this);
@@ -59,6 +67,12 @@ public class InstallerUI {
 
         gameFolderSelectScreen = new GameFolderSelectScreen(this);
         frame.getContentPane().add(gameFolderSelectScreen.initialize(), "selectGameFolder");
+
+        installingScreen = new InstallingScreen(this);
+        frame.getContentPane().add(installingScreen.initialize(), "installing");
+
+        completeScreen = new InstallCompleteScreen(this);
+        frame.getContentPane().add(completeScreen.initialize(), "complete");
     }
     
     // private void setContent(Component content) {
@@ -85,6 +99,37 @@ public class InstallerUI {
         }
 
         cards.show(contentPane, "selectGameFolder");
+    }
+
+    public void openInstallingScreen() {
+        cards.show(contentPane, "installing");
+    }
+
+    public void install() {
+        openInstallingScreen();
+        Thread installThread = new Thread(this::doInstall, "Installer");
+        installThread.start();
+    }
+    
+    protected void doInstall() {
+        try {
+            ModpackProvider modpack = ModpackProvider.fromConfig(app.getConfig());
+            Path launcherDir = launcherFolderSelectScreen.getFolder().toPath();
+            Path gameDir = gameFolderSelectScreen.getFolder().toPath();
+            
+            String profile = Installer.install(installingScreen, launcherDir, gameDir, modpack);
+            SwingUtilities.invokeLater(() -> openCompleteScreen(profile));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(contentPane, "Exception while installing.", "Install failed", JOptionPane.ERROR_MESSAGE);
+            frame.dispose();
+        }
+    }
+
+    public void openCompleteScreen(String profileName) {
+        completeScreen.setProfileName(profileName);
+        cards.show(contentPane, "complete");
     }
 
     public JFrame getFrame() {

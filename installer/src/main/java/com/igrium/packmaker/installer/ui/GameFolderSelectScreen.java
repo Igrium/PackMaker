@@ -28,7 +28,7 @@ public class GameFolderSelectScreen extends AbstractFolderSelectScreen {
 
     @Override
     protected void onSubmit(File folder) {
-        
+        ui.install();
     }
 
     @Override

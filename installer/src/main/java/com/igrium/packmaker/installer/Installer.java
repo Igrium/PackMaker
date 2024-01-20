@@ -24,9 +24,10 @@ public class Installer {
      * @param launcherDir Launcher root directory (presumably <code>%appdata%/.minecraft</code>).
      * @param gameDir Target Minecraft run directory.
      * @param modpack Mod pack to install.
+     * @return The name of the profile that was installed.
      * @throws Exception If something goes wrong during install. May be wrapped in a <code>CompletionException</code>.
      */
-    public static void install(ProgressHandle handle, Path launcherDir, Path gameDir, ModpackProvider modpack) throws Exception {
+    public static String install(ProgressHandle handle, Path launcherDir, Path gameDir, ModpackProvider modpack) throws Exception {
         handle.log("Fetching modpack metadata");
         handle.updateProgress(0, 4);
         MrPack pack = modpack.downloadPack();
@@ -65,9 +66,11 @@ public class Installer {
             }
         }
 
-        FabricInstaller.installProfile(launcherDir, gameDir, loaderVersion, icon, versionJson);
+        FabricInstaller.installProfile(launcherDir, gameDir, pack.getIndex().getName(), icon, versionJson);
 
         handle.log("Finished");
         handle.updateProgress(4, 4);
+
+        return pack.getIndex().getName();
     }
 }

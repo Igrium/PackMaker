@@ -78,6 +78,16 @@ public final class MrPackIndex {
         this.versionId = Objects.requireNonNull(versionId);
     }
 
+    private String name = "";
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = Objects.requireNonNull(name);
+    }
+
     private String summary;
 
     public String getSummary() {

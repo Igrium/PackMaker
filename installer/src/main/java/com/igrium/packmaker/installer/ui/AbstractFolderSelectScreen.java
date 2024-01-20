@@ -27,7 +27,7 @@ import javax.swing.JFileChooser;
 
 import java.awt.FlowLayout;
 
-public abstract class AbstractFolderSelectScreen {
+public abstract class AbstractFolderSelectScreen implements Screen {
 	private JTextField textField;
     private JButton nextButton;
     private JPanel root;
