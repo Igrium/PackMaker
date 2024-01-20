@@ -8,6 +8,9 @@ public class InstallerConfig {
         INTERNAL
     }
 
+    // For Gson
+    public InstallerConfig() {}
+
     private PackSource packSource = PackSource.MODRINTH;
     
     public PackSource getPackSource() {
@@ -26,6 +29,16 @@ public class InstallerConfig {
 
     public void setModrinthId(String modrinthId) {
         this.modrinthId = modrinthId;
+    }
+    
+    private String modpackName = "[modpack name]";
+
+    public String getModpackName() {
+        return modpackName;
+    }
+
+    public void setModpackName(String modpackName) {
+        this.modpackName = Objects.requireNonNull(modpackName);
     }
 
 }

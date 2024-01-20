@@ -28,5 +28,5 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'com.igrium.packmaker.installer.InstallerUI'
+    mainClass = 'com.igrium.packmaker.installer.InstallerApp'
 }
