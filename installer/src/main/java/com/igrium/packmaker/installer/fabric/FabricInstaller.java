@@ -25,7 +25,7 @@ public class FabricInstaller {
         if (Files.isRegularFile(versionFile)) {
             try(BufferedReader reader = Files.newBufferedReader(versionFile)) {
                 return GSON.fromJson(reader, JsonObject.class);
-            }
+            } catch (Exception e) {}
         }
         
         String json;

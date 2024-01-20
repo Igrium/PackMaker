@@ -89,6 +89,7 @@ public class MrPack implements Closeable {
         var entries = zipFile.entries();
         while (entries.hasMoreElements()) {
             ZipEntry entry = entries.nextElement();
+            if (entry.isDirectory()) continue;
 
             if (entry.getName().startsWith("overrides/")) {
                 globalOverrides.add(new MrPackOverride(

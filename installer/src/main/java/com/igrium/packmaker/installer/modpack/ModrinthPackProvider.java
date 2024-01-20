@@ -32,7 +32,7 @@ public class ModrinthPackProvider implements ModpackProvider {
         
         HttpRequest req = HttpRequest.newBuilder(file.url).GET().build();
         Path localFile = Files.createTempFile("pack-", ".mrpack");
-        localFile = modrinth.sendRequest(req, BodyHandlers.ofFileDownload(localFile));
+        localFile = modrinth.sendRequest(req, BodyHandlers.ofFile(localFile));
 
         return MrPack.open(localFile.toFile());
         // return new Mrpack(new ZipFile(localFile.toFile()));

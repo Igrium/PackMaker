@@ -55,10 +55,11 @@ public class FabricWebApi extends WebApi {
     }
 
     public String getVersionJson(String gameVersion, String loaderVersion) throws IOException, InterruptedException {
-        URI url = baseUrl.resolve("loader/%s/%s/profile/json".formatted(gameVersion, loaderVersion));
+        URI url = baseUrl.resolve("versions/loader/%s/%s/profile/json".formatted(gameVersion, loaderVersion));
         HttpRequest req = HttpRequest.newBuilder(url).GET().build();
 
-        return httpClient.send(req, BodyHandlers.ofString()).body();
+        // return httpClient.send(req, BodyHandlers.ofString()).body();
+        return sendRequest(req, BodyHandlers.ofString());
     }
 
     // public CompletableFuture<JsonObject> downloadJson(Path gameDir, String gameVersion, String loaderVersion) {
