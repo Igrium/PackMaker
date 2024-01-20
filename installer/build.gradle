@@ -26,7 +26,19 @@ dependencies {
     implementation project(':common')
 }
 
+def entrypoint = 'com.igrium.packmaker.installer.InstallerApp'
+
 application {
     // Define the main class for the application.
-    mainClass = 'com.igrium.packmaker.installer.InstallerApp'
+    mainClass = entrypoint
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": entrypoint
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
