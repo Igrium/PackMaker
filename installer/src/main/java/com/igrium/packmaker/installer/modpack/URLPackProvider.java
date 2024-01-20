@@ -6,9 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.zip.ZipFile;
 
-import io.github.gaming32.mrpacklib.Mrpack;
+import com.igrium.packmaker.mrpack.MrPack;
+
 
 public class URLPackProvider implements ModpackProvider {
     private final URL url;
@@ -22,13 +22,13 @@ public class URLPackProvider implements ModpackProvider {
     }
 
     @Override
-    public Mrpack downloadPack() throws IOException {
+    public MrPack downloadPack() throws IOException {
         File packFile = File.createTempFile("pack-", ".mrpack");
 
         try(InputStream in = url.openStream(); BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(packFile))) {
             in.transferTo(out);
         }
 
-        return new Mrpack(new ZipFile(packFile));
+        return MrPack.open(packFile);
     }
 }

@@ -19,7 +19,8 @@ public class FabricInstaller {
 
     public static JsonObject downloadJson(Path gameDir, String gameVersion, String loaderVersion, FabricWebApi api) throws IOException {
         String profileName = String.format("%s-%s-%s", "fabric-loader", loaderVersion, gameVersion);
-        Path versionFile = gameDir.resolve(profileName).resolve(profileName + ".json");
+        // Path versionFile = gameDir.resolve(profileName).resolve(profileName + ".json");
+        Path versionFile = gameDir.resolve("versions/%s/%s.json".formatted(profileName, profileName));
 
         if (Files.isRegularFile(versionFile)) {
             try(BufferedReader reader = Files.newBufferedReader(versionFile)) {
@@ -45,7 +46,7 @@ public class FabricInstaller {
 
     }
 
-    public static void installProfile(Path gameDir, String name, String icon, JsonObject versionJson) throws IOException {
+    public static void installProfile(Path launcherDir, Path gameDir, String name, String icon, JsonObject versionJson) throws IOException {
         JsonObject profile = new JsonObject();
         String time = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX").format(new Date());
 
@@ -56,8 +57,11 @@ public class FabricInstaller {
         profile.addProperty("icon", icon);
         profile.addProperty("javaArgs", "-Xmx4G -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M");
         profile.addProperty("lastVersionId", versionJson.get("id").getAsString());
+        if (!launcherDir.equals(gameDir)) {
+            profile.addProperty("gameDir", gameDir.toAbsolutePath().toString());
+        }
 
-        Path profileFile = gameDir.resolve("launcher_profiles.json");
+        Path profileFile = launcherDir.resolve("launcher_profiles.json");
 
         JsonObject profileJson;
         try(BufferedReader reader = Files.newBufferedReader(profileFile)) {

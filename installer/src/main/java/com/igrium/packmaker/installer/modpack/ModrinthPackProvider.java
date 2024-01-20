@@ -5,13 +5,11 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.zip.ZipFile;
 
 import com.igrium.packmaker.common.modrinth.ModrinthWebAPI;
 import com.igrium.packmaker.common.modrinth.ModrinthWebTypes.ModrinthProjectVersion;
 import com.igrium.packmaker.common.modrinth.ModrinthWebTypes.VersionFile;
-
-import io.github.gaming32.mrpacklib.Mrpack;
+import com.igrium.packmaker.mrpack.MrPack;
 
 public class ModrinthPackProvider implements ModpackProvider {
 
@@ -24,7 +22,7 @@ public class ModrinthPackProvider implements ModpackProvider {
     }
 
     @Override
-    public Mrpack downloadPack() throws IOException, InterruptedException {
+    public MrPack downloadPack() throws IOException, InterruptedException {
         ModrinthProjectVersion version = modrinth.getProjectVersion(versionId);
         if (version.files.isEmpty()) {
             throw new IOException("Modrinth version has no files.");
@@ -36,7 +34,8 @@ public class ModrinthPackProvider implements ModpackProvider {
         Path localFile = Files.createTempFile("pack-", ".mrpack");
         localFile = modrinth.sendRequest(req, BodyHandlers.ofFileDownload(localFile));
 
-        return new Mrpack(new ZipFile(localFile.toFile()));
+        return MrPack.open(localFile.toFile());
+        // return new Mrpack(new ZipFile(localFile.toFile()));
     }
     
 }
