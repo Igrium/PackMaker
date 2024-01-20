@@ -10,6 +10,13 @@ import com.igrium.packmaker.common.util.JsonBodyHandler;
 
 public class ModrinthWebAPI extends WebApi {
     public static final String DEFAULT_URL = "https://api.modrinth.com/v2/";
+
+    private static ModrinthWebAPI globalInstance;
+
+    public static ModrinthWebAPI getGlobalInstance() {
+        if (globalInstance == null) globalInstance = new ModrinthWebAPI();
+        return globalInstance;
+    }
     
     public ModrinthWebAPI(URI baseUrl) {
         super(baseUrl);
