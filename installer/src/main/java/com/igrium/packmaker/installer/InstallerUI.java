@@ -4,14 +4,15 @@ import java.awt.CardLayout;
 import java.awt.Container;
 import java.io.File;
 import java.nio.file.Path;
+import java.util.concurrent.CompletionException;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import com.igrium.packmaker.installer.modpack.ModpackProvider;
 import com.igrium.packmaker.installer.ui.GameFolderSelectScreen;
 import com.igrium.packmaker.installer.ui.InstallCompleteScreen;
+import com.igrium.packmaker.installer.ui.InstallFailedScreen;
 import com.igrium.packmaker.installer.ui.InstallingScreen;
 import com.igrium.packmaker.installer.ui.LauncherFolderSelectScreen;
 import com.igrium.packmaker.installer.ui.WelcomeScreen;
@@ -57,6 +58,7 @@ public class InstallerUI {
     private GameFolderSelectScreen gameFolderSelectScreen;
     private InstallingScreen installingScreen;
     private InstallCompleteScreen completeScreen;
+    private InstallFailedScreen installFailedScreen;
 
     private void init() {
         welcomeScreen = new WelcomeScreen(this);
@@ -73,6 +75,9 @@ public class InstallerUI {
 
         completeScreen = new InstallCompleteScreen(this);
         frame.getContentPane().add(completeScreen.initialize(), "complete");
+
+        installFailedScreen = new InstallFailedScreen(this);
+        frame.getContentPane().add(installFailedScreen.initialize(), "installFailed");
     }
     
     // private void setContent(Component content) {
@@ -120,16 +125,23 @@ public class InstallerUI {
             String profile = Installer.install(installingScreen, launcherDir, gameDir, modpack);
             SwingUtilities.invokeLater(() -> openCompleteScreen(profile));
 
-        } catch (Exception e) {
+        } catch (Throwable e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(contentPane, "Exception while installing.", "Install failed", JOptionPane.ERROR_MESSAGE);
-            frame.dispose();
+            if (e instanceof CompletionException) {
+                e = e.getCause();
+            }
+            openInstallFailedScreen(e);
         }
     }
 
     public void openCompleteScreen(String profileName) {
         completeScreen.setProfileName(profileName);
         cards.show(contentPane, "complete");
+    }
+
+    public void openInstallFailedScreen(Throwable ex) {
+        installFailedScreen.setException(ex);
+        cards.show(contentPane, "installFailed");
     }
 
     public JFrame getFrame() {
