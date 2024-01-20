@@ -25,7 +25,7 @@ public interface ModpackProvider {
         } else if (config.getPackSource() == PackSource.INTERNAL) {
             URL url = ModpackProvider.class.getResource("/internal.mrpack");
             if (url == null) {
-                throw new IllegalStateException("packSource was set to INTERNAL, but no modpack was bundled!");
+                throw new IllegalStateException("packSource was set to INTERNAL, but no 'internal.mrpack' was bundled!");
             }
             return new URLPackProvider(url);
         } else {
