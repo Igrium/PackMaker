@@ -17,10 +17,12 @@ public class PackInstaller {
 
     public static CompletableFuture<Void> install(MrPack pack, Path gameDir) {
         List<CompletableFuture<?>> futures = new LinkedList<>();
+        System.out.println("Installing modpack into " + gameDir);
         for (MrPackFileRef file : pack.getIndex().getFiles()) {
             if (file.getEnvCompat().client() == EnvSupport.UNSUPPORTED) continue;
 
             futures.add(CompletableFuture.runAsync(() -> {
+                System.out.println("Downloading " + file.getPath());
                 try {
                     file.download(gameDir);
                 } catch (IOException | InterruptedException e) {

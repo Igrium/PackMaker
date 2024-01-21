@@ -29,7 +29,7 @@ public class ModrinthPackProvider implements ModpackProvider {
         }
 
         VersionFile file = version.files.get(0);
-        
+        System.out.println("Downloading mrpack from " + file.url);
         HttpRequest req = HttpRequest.newBuilder(file.url).GET().build();
         Path localFile = Files.createTempFile("pack-", ".mrpack");
         localFile = modrinth.sendRequest(req, BodyHandlers.ofFile(localFile));

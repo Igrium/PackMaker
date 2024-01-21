@@ -42,6 +42,7 @@ public class Installer {
 
         handle.log("Installing Fabric");
         handle.updateProgress(1, 4);
+        System.out.println("Installing Fabric %s into %s".formatted(loaderVersion, launcherDir));
         FabricWebApi fabricWeb = new FabricWebApi();
         JsonObject versionJson = FabricInstaller.downloadJson(launcherDir, mcVersion, loaderVersion, fabricWeb);
 
