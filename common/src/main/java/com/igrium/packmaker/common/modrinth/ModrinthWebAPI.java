@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.http.HttpRequest;
 
 import com.igrium.packmaker.common.WebApi;
+import com.igrium.packmaker.common.modrinth.ModrinthWebTypes.ModrinthProject;
 import com.igrium.packmaker.common.modrinth.ModrinthWebTypes.ModrinthProjectVersion;
 import com.igrium.packmaker.common.util.JsonBodyHandler;
 
@@ -28,6 +29,24 @@ public class ModrinthWebAPI extends WebApi {
 
     public ModrinthWebAPI() {
         this(DEFAULT_URL);
+    }
+
+    public ModrinthProject getProject(String slug) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest
+                .newBuilder(baseUrl.resolve("project/" + slug))
+                .GET()
+                .build();
+        
+        return sendRequest(request, JsonBodyHandler.ofJson(ModrinthProject.class));
+    }
+    
+    public ModrinthProjectVersion[] getProjectVersions(String slug) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest
+                .newBuilder(baseUrl.resolve("project/" + slug + "/version"))
+                .GET()
+                .build();
+        
+        return sendRequest(request, JsonBodyHandler.ofJson(ModrinthProjectVersion[].class));
     }
 
     public ModrinthProjectVersion getProjectVersion(String versionId) throws IOException, InterruptedException {

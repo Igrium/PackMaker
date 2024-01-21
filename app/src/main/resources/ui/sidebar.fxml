@@ -35,7 +35,7 @@
          <children>
             <Label maxHeight="1.7976931348623157E308" minWidth="-Infinity" text="Modrinth Version ID" />
             <TextField fx:id="modrinthVersionField" HBox.hgrow="ALWAYS" />
-            <Button minWidth="-Infinity" mnemonicParsing="false" text="Browse" />
+            <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#browseModrinth" text="Browse" />
          </children>
       </HBox>
       <Separator prefWidth="200.0" />

@@ -23,6 +23,7 @@ public class URLPackProvider implements ModpackProvider {
 
     @Override
     public MrPack downloadPack() throws IOException {
+        System.out.println("Loading pack from " + url);
         File packFile = File.createTempFile("pack-", ".mrpack");
 
         try(InputStream in = url.openStream(); BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(packFile))) {

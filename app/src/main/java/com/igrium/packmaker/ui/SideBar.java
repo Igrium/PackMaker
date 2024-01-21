@@ -89,7 +89,16 @@ public class SideBar {
         File selectedFile = fileChooser.showOpenDialog(root.getScene().getWindow());
         if (selectedFile != null) {
             localFileField.setText(selectedFile.getAbsolutePath());
+            refresh();
         }
+    }
+
+    @FXML
+    public void browseModrinth() {
+        ModrinthBrowser.open(version -> {
+            modrinthVersionField.setText(version);
+            refresh();
+        });
     }
     
     public void loadPackInfo(MrPackIndex pack) {

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.igrium.packmaker.ui.ModrinthBrowser">
+   <center>
+      <VBox spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox spacing="10.0">
+               <children>
+                  <Label maxHeight="1.7976931348623157E308" text="Modpack URL" />
+                  <TextField fx:id="urlTextField" promptText="https://modrinth.com/modpack/" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="openButton" mnemonicParsing="false" onAction="#loadUrl" text="Open" />
+               </children>
+            </HBox>
+            <TableView fx:id="versionTable" VBox.vgrow="ALWAYS">
+              <columns>
+                <TableColumn fx:id="nameColumn" prefWidth="138.0" text="Name" />
+                <TableColumn fx:id="versionColumn" prefWidth="123.0" text="Version Number" />
+                  <TableColumn fx:id="gameVersionColumn" prefWidth="143.0" text="Game Versions" />
+              </columns>
+            </TableView>
+         </children>
+         <BorderPane.margin>
+            <Insets left="32.0" right="32.0" top="20.0" />
+         </BorderPane.margin>
+      </VBox>
+   </center>
+   <bottom>
+      <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <buttons>
+            <Button cancelButton="true" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
+          <Button fx:id="selectButton" defaultButton="true" disable="true" mnemonicParsing="false" onAction="#select" text="Select" />
+        </buttons>
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding>
+      </ButtonBar>
+   </bottom>
+</BorderPane>
