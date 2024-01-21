@@ -18,6 +18,15 @@ public class ModrinthWebTypes {
         SHADER
     }
 
+    public static enum ModrinthVersionType {
+        @SerializedName("release")
+        RELEASE,
+        @SerializedName("beta")
+        BETA,
+        @SerializedName("alpha")
+        ALPHA
+    }
+
     public static class ModrinthProject {
         public String slug;
         public String title;
@@ -35,6 +44,11 @@ public class ModrinthWebTypes {
 
         @SerializedName("game_versions")
         public List<String> gameVersions = new ArrayList<>();
+
+        @SerializedName("version_type")
+        public ModrinthVersionType versionType;
+        
+        public List<String> loaders = new ArrayList<>();
 
         public String id;
 

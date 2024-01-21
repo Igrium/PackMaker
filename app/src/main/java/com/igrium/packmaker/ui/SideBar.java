@@ -1,8 +1,6 @@
 package com.igrium.packmaker.ui;
 
 import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.function.Consumer;
 
 import com.igrium.packmaker.common.modrinth.ModrinthWebAPI;

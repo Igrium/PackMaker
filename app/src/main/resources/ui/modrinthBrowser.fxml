@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
 <BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.igrium.packmaker.ui.ModrinthBrowser">
    <center>
       <VBox spacing="10.0" BorderPane.alignment="CENTER">
@@ -25,9 +24,10 @@
             </HBox>
             <TableView fx:id="versionTable" VBox.vgrow="ALWAYS">
               <columns>
-                <TableColumn fx:id="nameColumn" prefWidth="138.0" text="Name" />
-                <TableColumn fx:id="versionColumn" prefWidth="123.0" text="Version Number" />
-                  <TableColumn fx:id="gameVersionColumn" prefWidth="143.0" text="Game Versions" />
+                <TableColumn prefWidth="116.0" text="Name" />
+                <TableColumn prefWidth="139.0" text="Version Number" />
+                  <TableColumn prefWidth="70.0" text="Loader" />
+                  <TableColumn prefWidth="98.0" text="Game Version" />
               </columns>
             </TableView>
          </children>

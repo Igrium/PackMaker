@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import com.igrium.packmaker.common.modrinth.ModrinthWebAPI;
 import com.igrium.packmaker.common.modrinth.ModrinthWebTypes.ModrinthProject;
@@ -45,9 +46,7 @@ public class ModrinthBrowser {
     private Button selectButton;
     
     @FXML private TableView<ModrinthProjectVersion> versionTable;
-    @FXML private TableColumn<ModrinthProjectVersion, String> nameColumn;
-    @FXML private TableColumn<ModrinthProjectVersion, String> versionColumn;
-    @FXML private TableColumn<ModrinthProjectVersion, String> gameVersionColumn;
+
 
     public EventDispatcher<Runnable> getCancelEvent() {
         return cancelEvent;
@@ -59,13 +58,22 @@ public class ModrinthBrowser {
 
     @FXML
     public void initialize() {
-        nameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().name));
-        versionColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().versionNumber));
-        gameVersionColumn.setCellValueFactory(
-                data -> new SimpleStringProperty(String.join(", ", data.getValue().gameVersions)));
+        setCellValueFactory(getColumn(0), v -> v.name);
+        setCellValueFactory(getColumn(1), v -> v.versionNumber);
+        setCellValueFactory(getColumn(2), v -> String.join(", ", v.loaders));
+        setCellValueFactory(getColumn(3), v -> String.join(",", v.gameVersions));
 
         versionTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         versionTable.getSelectionModel().selectedItemProperty().addListener(this::onUpdateSelection);
+    }
+
+    private void setCellValueFactory(TableColumn<ModrinthProjectVersion, String> column, Function<ModrinthProjectVersion, String> func) {
+        column.setCellValueFactory(data -> new SimpleStringProperty(func.apply(data.getValue())));
+    }
+
+    @SuppressWarnings("unchecked")
+    protected TableColumn<ModrinthProjectVersion, String> getColumn(int index) {
+        return (TableColumn<ModrinthProjectVersion, String>) versionTable.getColumns().get(index);
     }
     
     @FXML
@@ -80,7 +88,14 @@ public class ModrinthBrowser {
             System.err.println("Tried to commit selection with nothing selected!");
             return;
         }
-
+        if (!version.loaders.stream().anyMatch(str -> str.contains("fabric"))) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("invalid loader");
+            alert.setHeaderText("Invalid Loader");
+            alert.setContentText("Only Fabric modpacks are supported.");
+            alert.show();
+            return;
+        }
         selectEvent.invoker().accept(version.id);
     }
 
@@ -144,21 +159,34 @@ public class ModrinthBrowser {
             if (e != null) {
                 showLoadErrorScreen(e, id);
             } else {
-                showVersions(versions);
+                showVersions(new SelectedVersion(versions, null));
             }
         }, Platform::runLater);
     }
 
-    private static ModrinthProjectVersion[] doLoadUrl(String url) throws Exception {
+    private static record SelectedVersion(ModrinthProjectVersion[] versions, String selectedVersion) {};
+
+    private static SelectedVersion doLoadUrl(String url) throws Exception {
         URI uri = new URI(url);
         if (!"modrinth.com".equals(uri.getAuthority())) {
             throw new IllegalArgumentException("Only Modrinth urls are allowed.");
         }
 
         String[] path = uri.getPath().split("/");
-        String slug = path[path.length - 1];
+        String slug;
+        String selectedVersion = null;
 
-        return doLoadVersions(slug);
+        if (path.length >= 5 && path[path.length - 2].equals("version")) {
+            slug = path[path.length - 3];
+            selectedVersion = path[path.length - 1];
+        } else if (path.length >= 4 && path[path.length - 1].equals("versions")) {
+            slug = path[path.length - 2];
+        } else {
+            slug = path[path.length - 1];
+        }
+        
+
+        return new SelectedVersion(doLoadVersions(slug), selectedVersion);
     }
 
     private static ModrinthProjectVersion[] doLoadVersions(String slug) throws IOException, InterruptedException {
@@ -172,10 +200,21 @@ public class ModrinthBrowser {
         return api.getProjectVersions(slug);
     }
 
-    private void showVersions(ModrinthProjectVersion[] versions) {
+    private void showVersions(SelectedVersion versions) {
         versionTable.getSelectionModel().clearSelection();
         versionTable.getItems().clear();
-        versionTable.getItems().addAll(versions);
+        versionTable.getItems().addAll(versions.versions());
+
+        if (versions.selectedVersion != null) {
+            int i = 0;
+            for (ModrinthProjectVersion version : versionTable.getItems()) {
+                if (version.versionNumber.equals(versions.selectedVersion)) {
+                    versionTable.getSelectionModel().select(i);
+                    break;
+                }
+                i++;
+            }
+        }
     }
 
     private void showLoadErrorScreen(Throwable e, String slug) {
