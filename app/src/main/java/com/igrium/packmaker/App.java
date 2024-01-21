@@ -87,25 +87,31 @@ public class App extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/main.fxml"));
         root = loader.load();
         mainUI = loader.getController();
-        mainUI.getSidebarController().getRefreshEvent().addListener(this::onRefreshModpack);
+        mainUI.getSidebarController().getRefreshEvent().addListener(this::refreshModpack);
         mainUI.getSidebarController().getExportInstallerEvent().addListener(this::export);
 
         Scene scene = new Scene(root);
         return scene;
     }
 
-    private MrPack currentPack;
+    public record LoadedPack(ModpackProvider provider, MrPack pack) {};
 
-    public MrPack getCurrentPack() {
+    private LoadedPack currentPack;
+
+    public LoadedPack getCurrentPack() {
         return currentPack;
     }
 
-    public void setCurrentPack(MrPack currentPack) {
+    public void setCurrentPack(LoadedPack currentPack) {
         this.currentPack = currentPack;
-        mainUI.getSidebarController().loadPackInfo(currentPack.getIndex());
+        mainUI.getSidebarController().loadPackInfo(currentPack);
     }
 
-    private void onRefreshModpack(ModpackProvider modpack) {
+    public void setCurrentPack(ModpackProvider provider, MrPack pack) {
+        setCurrentPack(new LoadedPack(provider, pack));
+    }
+
+    public void refreshModpack(ModpackProvider modpack) {
         mainUI.getSidebar().setDisable(true);
         CompletableFuture.supplyAsync(() -> {
             try {
@@ -119,7 +125,7 @@ public class App extends Application {
                 handleLoadFail(ex);
                 return;
             }
-            setCurrentPack(pack);
+            setCurrentPack(new LoadedPack(modpack, pack));
         }, Platform::runLater);
     }
 

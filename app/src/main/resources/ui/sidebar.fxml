@@ -47,7 +47,12 @@
          </children>
       </HBox>
       <Separator prefWidth="200.0" />
-      <Button mnemonicParsing="false" onAction="#refresh" text="Refresh Mod Info" />
+      <HBox spacing="10.0" VBox.vgrow="NEVER">
+         <children>
+            <Button mnemonicParsing="false" onAction="#refresh" text="Refresh Mod Info" />
+            <Button fx:id="showInBrowserButton" disable="true" mnemonicParsing="false" onAction="#showInBrowser" text="Show in Browser" />
+         </children>
+      </HBox>
       <GridPane>
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />

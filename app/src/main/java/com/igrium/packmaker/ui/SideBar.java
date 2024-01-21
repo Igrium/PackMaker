@@ -1,22 +1,30 @@
 package com.igrium.packmaker.ui;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.function.Consumer;
 
+import com.igrium.packmaker.App;
+import com.igrium.packmaker.App.LoadedPack;
 import com.igrium.packmaker.common.modrinth.ModrinthWebAPI;
+import com.igrium.packmaker.common.modrinth.ModrinthWebTypes.ModrinthProjectVersion;
 import com.igrium.packmaker.common.pack.FilePackProvider;
 import com.igrium.packmaker.common.pack.ModpackProvider;
 import com.igrium.packmaker.common.pack.ModrinthPackProvider;
-import com.igrium.packmaker.mrpack.MrPackIndex;
 import com.igrium.packmaker.util.EventDispatcher;
 
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -57,6 +65,9 @@ public class SideBar {
 
     @FXML
     private TextField localFileField;
+    
+    @FXML
+    private Button showInBrowserButton;
 
     @FXML
     private Label nameLabel;
@@ -113,12 +124,52 @@ public class SideBar {
             refresh();
         });
     }
+
+    private String cachedModrinthId;
     
-    public void loadPackInfo(MrPackIndex pack) {
-        nameLabel.setText(pack != null ? pack.getName() : "");
-        mcVerLabel.setText(pack != null ? pack.getDependencies().getMinecraft() : "");
-        fabricVerLabel.setText(pack != null ? pack.getDependencies().getFabricLoader() : "");
+    public void loadPackInfo(LoadedPack pack) {
+        nameLabel.setText(pack != null ? pack.pack().getIndex().getName() : "");
+        mcVerLabel.setText(pack != null ? pack.pack().getIndex().getDependencies().getMinecraft() : "");
+        fabricVerLabel.setText(pack != null ? pack.pack().getIndex().getDependencies().getFabricLoader() : "");
         exportButton.setDisable(pack == null);
+
+        if (pack != null && pack.provider() instanceof ModrinthPackProvider modrinth) {
+            cachedModrinthId = modrinth.getVersionId();
+            showInBrowserButton.setDisable(false);
+        } else {
+            cachedModrinthId = null;
+            showInBrowserButton.setDisable(true);
+        }
+    }
+
+    @FXML
+    public void showInBrowser() {
+        if (cachedModrinthId == null) return;
+
+        CompletableFuture.supplyAsync(() -> {
+            ModrinthProjectVersion version;
+            try {
+                version = ModrinthWebAPI.getGlobalInstance().getProjectVersion(cachedModrinthId);
+            } catch (IOException | InterruptedException e) {
+                throw new CompletionException(e);
+            }
+            return String.format("https://modrinth.com/project/%s/version/%s", version.projectId, version.id);
+        }).whenCompleteAsync((url, e) -> {
+            if (e instanceof CompletionException) {
+                e = e.getCause();
+            }
+
+            if (e != null) {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Error opening browser.");
+                alert.setHeaderText("Error opening browser.");
+                alert.setContentText("See console for details.");
+                return;
+            }
+
+            App.getInstance().getHostServices().showDocument(url);
+
+        }, Platform::runLater);
     }
 
     public ModpackProvider parsePackInfo() {
