@@ -42,19 +42,25 @@ public class MrPack implements Closeable {
     }
 
     public static MrPack open(File file) throws IOException {
-        MrPack pack = new MrPack(new ZipFile(file));
+        MrPack pack = new MrPack(new ZipFile(file), file);
         pack.load();
         return pack;
     }
 
     private final ZipFile zipFile;
+    private final File file;
 
-    protected MrPack(ZipFile zipFile) {
+    protected MrPack(ZipFile zipFile, File file) {
         this.zipFile = zipFile;
+        this.file = file;
     }
 
     public ZipFile getZipFile() {
         return zipFile;
+    }
+
+    public File getFile() {
+        return file;
     }
 
     private MrPackIndex index;

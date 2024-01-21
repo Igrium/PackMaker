@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public interface EventDispatcher<T> {
-    public void register(T listener);
+    public void addListener(T listener);
     public T invoker();
 
     public static <T> EventDispatcher<T> createArrayBacked(Function<List<T>, T> invokerFactory) {
@@ -34,7 +34,7 @@ public interface EventDispatcher<T> {
         }
 
         @Override
-        public void register(T listener) {
+        public void addListener(T listener) {
             listeners.add(listener);
             this.invoker = invokerFactory.apply(listeners);
         }
@@ -51,7 +51,7 @@ public interface EventDispatcher<T> {
         private List<Consumer<T>> listeners = new ArrayList<>();
 
         @Override
-        public void register(Consumer<T> listener) {
+        public void addListener(Consumer<T> listener) {
             listeners.add(listener);
         }
 
@@ -72,7 +72,7 @@ public interface EventDispatcher<T> {
         private List<Runnable> listeners = new ArrayList<>();
 
         @Override
-        public void register(Runnable listener) {
+        public void addListener(Runnable listener) {
             listeners.add(listener);
         }
 

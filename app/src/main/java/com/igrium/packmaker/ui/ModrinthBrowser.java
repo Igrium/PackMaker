@@ -216,11 +216,11 @@ public class ModrinthBrowser {
             stage.setTitle("Select Modpack Version");
 
             ModrinthBrowser controller = loader.getController();
-            controller.getCancelEvent().register(() -> {
+            controller.getCancelEvent().addListener(() -> {
                 stage.close();
             });
 
-            controller.getSelectEvent().register(val -> {
+            controller.getSelectEvent().addListener(val -> {
                 stage.close();
                 onSelect.accept(val);
                 prevUrl = controller.urlTextField.getText();

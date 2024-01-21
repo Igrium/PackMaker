@@ -10,6 +10,7 @@ import com.igrium.packmaker.common.pack.FilePackProvider;
 import com.igrium.packmaker.common.pack.ModpackProvider;
 import com.igrium.packmaker.common.pack.ModrinthPackProvider;
 import com.igrium.packmaker.mrpack.MrPackIndex;
+import com.igrium.packmaker.util.EventDispatcher;
 
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -23,9 +24,23 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
 public class SideBar {
+
+    public static interface ExportInstallerEvent {
+        public void export(ModpackProvider provider, String title);
+    }
+
     public static enum ModpackSource { Modrinth, File }
 
-    private final List<Consumer<? super ModpackProvider>> refreshListeners = new LinkedList<>();
+    // private final List<Consumer<? super ModpackProvider>> refreshListeners = new LinkedList<>();
+    private final EventDispatcher<Consumer<ModpackProvider>> refreshEvent = EventDispatcher.createSimple();
+
+    private final EventDispatcher<ExportInstallerEvent> exportInstallerEvent = EventDispatcher.createArrayBacked(
+        listeners -> (provider, title) -> {
+            for (var l : listeners) {
+                l.export(provider, title);
+            }
+        }
+    );
 
     @FXML
     private Parent root;
@@ -116,15 +131,21 @@ public class SideBar {
         }
     }
 
-    public void addRefreshListener(Consumer<? super ModpackProvider> listener) {
-        refreshListeners.add(listener);
+    public void export() {
+        exportInstallerEvent.invoker().export(parsePackInfo(), nameLabel.getText());
+    }
+
+    public EventDispatcher<Consumer<ModpackProvider>> getRefreshEvent() {
+        return refreshEvent;
+    }
+
+    public EventDispatcher<ExportInstallerEvent> getExportInstallerEvent() {
+        return exportInstallerEvent;
     }
 
     @FXML
     public void refresh() {
         ModpackProvider provider = parsePackInfo();
-        for (var l : refreshListeners) {
-            l.accept(provider);
-        }
+        refreshEvent.invoker().accept(provider);
     }
 }

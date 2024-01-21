@@ -21,6 +21,10 @@ public class ModrinthPackProvider implements ModpackProvider {
         this.versionId = versionId;
     }
 
+    public String getVersionId() {
+        return versionId;
+    }
+
     @Override
     public MrPack downloadPack() throws IOException, InterruptedException {
         ModrinthProjectVersion version = modrinth.getProjectVersion(versionId);

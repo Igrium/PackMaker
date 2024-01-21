@@ -3,7 +3,10 @@
  */
 package com.igrium.packmaker;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.CompletableFuture;
@@ -11,6 +14,7 @@ import java.util.concurrent.CompletionException;
 
 import com.igrium.packmaker.common.pack.ModpackProvider;
 import com.igrium.packmaker.common.util.HttpException;
+import com.igrium.packmaker.exporter.Exporter;
 import com.igrium.packmaker.mrpack.MrPack;
 import com.igrium.packmaker.ui.MainUI;
 
@@ -21,7 +25,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 public class App extends Application {
     private static App instance;
@@ -37,14 +43,26 @@ public class App extends Application {
     private URL installerJar;
 
     private MainUI mainUI;
+    private Parent root;
 
     public MainUI getMainUI() {
         return mainUI;
     }
 
+    public Parent getRoot() {
+        return root;
+    }
+
+    private Stage primaryStage;
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         instance = this;
+        this.primaryStage = primaryStage;
 
         Scene scene = initUi();
         primaryStage.setScene(scene);
@@ -67,11 +85,12 @@ public class App extends Application {
 
     private Scene initUi() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/main.fxml"));
-        Parent parent = loader.load();
+        root = loader.load();
         mainUI = loader.getController();
-        mainUI.getSidebarController().addRefreshListener(this::onRefreshModpack);
+        mainUI.getSidebarController().getRefreshEvent().addListener(this::onRefreshModpack);
+        mainUI.getSidebarController().getExportInstallerEvent().addListener(this::export);
 
-        Scene scene = new Scene(parent);
+        Scene scene = new Scene(root);
         return scene;
     }
 
@@ -129,5 +148,61 @@ public class App extends Application {
         alert.setHeaderText("Unable to load modpack.");
         alert.setContentText(message);
         alert.show();
+    }
+
+    public CompletableFuture<?> export(ModpackProvider provider, String name) {
+        if (installerJar == null) {
+            showNoInstallerError();
+            return CompletableFuture.failedFuture(new IllegalStateException("No installer"));
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export installer");
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("Java Executables", "*.jar"));
+
+        File file = fileChooser.showSaveDialog(getPrimaryStage());
+        if (file != null) {
+            if (!file.getName().endsWith(".jar")) {
+                file = new File(file.getAbsolutePath() + ".jar");
+            }
+            return doExport(file, provider, name);
+        } else {
+            return CompletableFuture.completedFuture(null);
+        }
+    }
+
+
+    public CompletableFuture<?> doExport(File target, ModpackProvider provider, String name) {
+        root.setDisable(true);
+        
+        return CompletableFuture.runAsync(() -> {
+            try(BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(target))) {
+                new Exporter(installerJar).export(out, name, provider);
+                
+            } catch (Exception e) {
+                throw new CompletionException(e);
+            }
+        }).whenCompleteAsync((val, ex) -> {
+            root.setDisable(false);
+            if (ex instanceof CompletionException) {
+                ex = ex.getCause();
+            }
+
+            if (ex != null) {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Error exporting modpack.");
+                alert.setHeaderText("Error exporting modpack!");
+                alert.setContentText(ex.getMessage());
+                ex.printStackTrace();
+                alert.show();
+
+            } else {
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Export complete!");
+                alert.setHeaderText("Export complete!");
+                alert.setContentText("Wrote to " + target);
+                alert.show();
+            }
+        }, Platform::runLater);
     }
 }
