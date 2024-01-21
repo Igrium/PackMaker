@@ -9,7 +9,7 @@ import java.util.concurrent.CompletionException;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import com.igrium.packmaker.installer.modpack.ModpackProvider;
+import com.igrium.packmaker.common.pack.ModpackProvider;
 import com.igrium.packmaker.installer.ui.GameFolderSelectScreen;
 import com.igrium.packmaker.installer.ui.InstallCompleteScreen;
 import com.igrium.packmaker.installer.ui.InstallFailedScreen;

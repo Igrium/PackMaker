@@ -129,3 +129,6 @@ local.properties
 
 .javafx/*
 .vscode/
+
+# Will be copied from installer build dir.
+app/src/main/resources/installer.jar

@@ -3,26 +3,131 @@
  */
 package com.igrium.packmaker;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+
+import com.igrium.packmaker.common.pack.ModpackProvider;
+import com.igrium.packmaker.common.util.HttpException;
+import com.igrium.packmaker.mrpack.MrPack;
+import com.igrium.packmaker.ui.MainUI;
+
 import javafx.application.Application;
-import javafx.geometry.Insets;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
 public class App extends Application {
+    private static App instance;
+
+    public static App getInstance() {
+        return instance;
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
 
+    private URL installerJar;
+
+    private MainUI mainUI;
+
+    public MainUI getMainUI() {
+        return mainUI;
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Label label = new Label("Hello World!");
-        AnchorPane pane = new AnchorPane(label);
-        label.setPadding(new Insets(20));
+        instance = this;
 
-        Scene scene = new Scene(pane);
+        Scene scene = initUi();
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        installerJar = getClass().getResource("/installer.jar");
+        if (installerJar == null) {
+            System.err.println("Installer jar not found. Installer export will not work.");
+            showNoInstallerError();
+        }
+    }
+
+    public void showNoInstallerError() {
+        Alert a = new Alert(AlertType.WARNING);
+        a.setTitle("Installer not found");
+        a.setHeaderText("Installer not found");
+        a.setContentText("The bundled installer jar was not found. Installer export will not work.");
+        a.show();
+    }
+
+    private Scene initUi() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/main.fxml"));
+        Parent parent = loader.load();
+        mainUI = loader.getController();
+        mainUI.getSidebarController().addRefreshListener(this::onRefreshModpack);
+
+        Scene scene = new Scene(parent);
+        return scene;
+    }
+
+    private MrPack currentPack;
+
+    public MrPack getCurrentPack() {
+        return currentPack;
+    }
+
+    public void setCurrentPack(MrPack currentPack) {
+        this.currentPack = currentPack;
+        mainUI.getSidebarController().loadPackInfo(currentPack.getIndex());
+    }
+
+    private void onRefreshModpack(ModpackProvider modpack) {
+        mainUI.getSidebar().setDisable(true);
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                return modpack.downloadPack();
+            } catch (IOException | InterruptedException e) {
+                throw new CompletionException(e);
+            }
+        }).whenCompleteAsync((pack, ex) -> {
+            mainUI.getSidebar().setDisable(false);
+            if (ex != null) {
+                handleLoadFail(ex);
+                return;
+            }
+            setCurrentPack(pack);
+        }, Platform::runLater);
+    }
+
+    private void handleLoadFail(Throwable ex) {
+        if (ex instanceof CompletionException) {
+            ex = ex.getCause();
+        }
+
+        if (ex instanceof HttpException http) {
+            if (http.getStatusCode() == 404) {
+                doLoadFailedAlert("The specified modpack version was not found.");
+            } else {
+                doLoadFailedAlert("(status code %d)".formatted(http.getStatusCode()));
+            }
+        } else if (ex instanceof FileNotFoundException) {
+            doLoadFailedAlert("The selected file could not be found.");
+        } else {
+            doLoadFailedAlert("An unknown error occurd. See console for details.");
+            ex.printStackTrace();
+        }
+    }
+
+    private void doLoadFailedAlert(String message) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Unable to load modpack");
+        alert.setHeaderText("Unable to load modpack.");
+        alert.setContentText(message);
+        alert.show();
     }
 }

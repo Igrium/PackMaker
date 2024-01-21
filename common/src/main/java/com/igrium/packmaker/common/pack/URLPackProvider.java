@@ -1,4 +1,4 @@
-package com.igrium.packmaker.installer.modpack;
+package com.igrium.packmaker.common.pack;
 
 import java.io.BufferedOutputStream;
 import java.io.File;

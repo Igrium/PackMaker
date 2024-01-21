@@ -33,6 +33,7 @@ dependencies {
 }
 
 processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     from project(':installer').buildDir.toString() + '/libs/installer.jar'
 }
 

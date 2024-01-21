@@ -1,4 +1,4 @@
-package com.igrium.packmaker.installer.modpack;
+package com.igrium.packmaker.common.pack;
 
 import java.io.IOException;
 import java.net.URL;

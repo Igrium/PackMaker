@@ -7,8 +7,8 @@ import java.nio.file.Path;
 
 import com.google.gson.JsonObject;
 import com.igrium.packmaker.common.fabric.FabricWebApi;
+import com.igrium.packmaker.common.pack.ModpackProvider;
 import com.igrium.packmaker.installer.fabric.FabricInstaller;
-import com.igrium.packmaker.installer.modpack.ModpackProvider;
 import com.igrium.packmaker.installer.modpack.PackInstaller;
 import com.igrium.packmaker.installer.util.ImageEncoder;
 import com.igrium.packmaker.installer.util.ProgressHandle;

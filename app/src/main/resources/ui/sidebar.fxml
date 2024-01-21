@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="369.0" spacing="10.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.igrium.packmaker.ui.SideBar">
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+   <children>
+      <HBox spacing="10.0">
+         <children>
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Modpack Source" />
+            <AnchorPane HBox.hgrow="ALWAYS">
+               <children>
+                  <ChoiceBox fx:id="modpackSource" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+         </children>
+      </HBox>
+      <Separator prefWidth="200.0" />
+      <HBox fx:id="modrinthConfig" spacing="10.0">
+         <children>
+            <Label maxHeight="1.7976931348623157E308" minWidth="-Infinity" text="Modrinth Version ID" />
+            <TextField fx:id="modrinthVersionField" HBox.hgrow="ALWAYS" />
+            <Button minWidth="-Infinity" mnemonicParsing="false" text="Browse" />
+         </children>
+      </HBox>
+      <Separator prefWidth="200.0" />
+      <HBox fx:id="localFileConfig" spacing="10.0">
+         <children>
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" text="MrPack File" />
+            <TextField fx:id="localFileField" HBox.hgrow="ALWAYS" />
+            <Button mnemonicParsing="false" onAction="#browseFile" text="Browse" />
+         </children>
+      </HBox>
+      <Separator prefWidth="200.0" />
+      <Button mnemonicParsing="false" onAction="#refresh" text="Refresh Mod Info" />
+      <GridPane>
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
+          <ColumnConstraints hgrow="SOMETIMES" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Modpack Name" />
+            <Label text="Minecraft Version" GridPane.rowIndex="1" />
+            <Label text="Fabric Version" GridPane.rowIndex="2" />
+            <Label fx:id="nameLabel" GridPane.columnIndex="1" />
+            <Label fx:id="mcVerLabel" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="fabricVerLabel" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         </children>
+      </GridPane>
+      <Pane VBox.vgrow="ALWAYS" />
+      <ButtonBar prefHeight="40.0" prefWidth="200.0">
+        <buttons>
+          <Button fx:id="exportButton" defaultButton="true" disable="true" mnemonicParsing="false" text="Export" />
+        </buttons>
+      </ButtonBar>
+   </children>
+</VBox>

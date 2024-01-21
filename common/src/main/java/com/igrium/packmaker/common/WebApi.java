@@ -7,6 +7,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpClient.Redirect;
 import java.net.http.HttpResponse.BodyHandler;
 
+import com.igrium.packmaker.common.util.HttpException;
 import com.igrium.packmaker.common.util.WebUtils;
 
 public abstract class WebApi {
@@ -38,7 +39,7 @@ public abstract class WebApi {
     public <T> T sendRequest(HttpRequest request, BodyHandler<T> bodyHandler) throws IOException, InterruptedException {
         var res = httpClient.send(request, bodyHandler);
         if (res.statusCode() >= 400) {
-            throw new IOException("Server returned HTTP code " + res.statusCode());
+            throw new HttpException(res.statusCode());
         }
         return res.body();
     }
