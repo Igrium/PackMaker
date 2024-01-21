@@ -125,6 +125,14 @@ public class App extends Application {
                 handleLoadFail(ex);
                 return;
             }
+            if (pack.getIndex().getDependencies().getFabricLoader() == null) {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Invalid loader.");
+                alert.setHeaderText("Invalid loader.");
+                alert.setContentText("Only Fabric modpacks are supported.");
+                alert.show();
+                return;
+            }
             setCurrentPack(new LoadedPack(modpack, pack));
         }, Platform::runLater);
     }
