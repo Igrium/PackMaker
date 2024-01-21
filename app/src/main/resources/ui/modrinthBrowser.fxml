@@ -19,7 +19,8 @@
                <children>
                   <Label maxHeight="1.7976931348623157E308" text="Modpack URL" />
                   <TextField fx:id="urlTextField" promptText="https://modrinth.com/modpack/" HBox.hgrow="ALWAYS" />
-                  <Button fx:id="openButton" mnemonicParsing="false" onAction="#loadUrl" text="Open" />
+                  <Button mnemonicParsing="false" onAction="#browse" text="Browse" />
+                  <Button fx:id="openButton" mnemonicParsing="false" onAction="#loadUrl" text="Load" />
                </children>
             </HBox>
             <TableView fx:id="versionTable" VBox.vgrow="ALWAYS">

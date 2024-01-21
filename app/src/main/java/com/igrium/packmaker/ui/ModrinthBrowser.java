@@ -105,6 +105,15 @@ public class ModrinthBrowser {
     }
 
     @FXML
+    public void browse() {
+        WebBrowser browser = WebBrowser.open();
+        browser.getSelectPageEvent().addListener(page -> {
+            urlTextField.setText(page);
+            loadUrl();
+        });
+    }
+
+    @FXML
     public void loadUrl() {
         String url = urlTextField.getText();
         if (url == null || url.isBlank()) {
