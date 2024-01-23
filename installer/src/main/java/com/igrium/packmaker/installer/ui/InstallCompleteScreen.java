@@ -16,12 +16,13 @@ import java.awt.Dimension;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
 
-public class InstallCompleteScreen implements Screen {
+public class InstallCompleteScreen extends AbstractInstallerScreen implements Screen {
 
     private final InstallerUI ui;
 
     private JPanel root;
     private JLabel descriptionLabel;
+    private JLabel titleLabel;
     
     public InstallCompleteScreen(InstallerUI ui) {
         this.ui = ui;
@@ -39,8 +40,18 @@ public class InstallCompleteScreen implements Screen {
         return descriptionLabel;
     }
 
-    public void setProfileName(String profileName) {
-        descriptionLabel.setText("A profile has been created in your launcher called '%s'.".formatted(profileName));
+    @Override
+    protected void updateTitle(String titleText) {
+        titleLabel.setText(titleText);
+    }
+
+    @Override
+    protected void updateDescription(String descriptionText) {
+        descriptionLabel.setText(descriptionText);
+    }
+
+    public void setProfileName(String name) {
+        setParam(name);
     }
     
     /**
@@ -55,7 +66,7 @@ public class InstallCompleteScreen implements Screen {
         root.add(topPanel, BorderLayout.NORTH);
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
         
-        JLabel titleLabel = new JLabel("Installation Complete!");
+        titleLabel = new JLabel("Installation Complete!");
         titleLabel.setFont(new Font("Tahoma", Font.PLAIN, 21));
         topPanel.add(titleLabel);
         
@@ -70,7 +81,6 @@ public class InstallCompleteScreen implements Screen {
         centerPanel.add(rigidArea);
         
         descriptionLabel = new JLabel();
-        setProfileName("[unknown]");
         centerPanel.add(descriptionLabel);
         
         JPanel bottomPanel = new JPanel();
@@ -81,6 +91,7 @@ public class InstallCompleteScreen implements Screen {
         JButton closeButton = new JButton("Close");
         closeButton.addActionListener(a -> close());
         bottomPanel.add(closeButton);
+        setProfileName("[unknown]");
 
         return root;
     }

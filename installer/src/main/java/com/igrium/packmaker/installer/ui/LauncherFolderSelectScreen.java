@@ -16,12 +16,12 @@ public class LauncherFolderSelectScreen extends AbstractFolderSelectScreen {
     }
 
     @Override
-    protected String getTitle() {
+    protected String getDefaultTitle() {
         return "Select Installation Directory";
     }
 
     @Override
-    protected String getDescription() {
+    protected String getDefaultDescription() {
         return "Please locate the directory in which Minecraft Launcher is installed.";
     }
 

@@ -11,10 +11,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.igrium.packmaker.installer.InstallerApp;
 import com.igrium.packmaker.installer.InstallerUI;
 
-public class WelcomeScreen implements Screen {
+public class WelcomeScreen extends AbstractInstallerScreen implements Screen {
     private final InstallerUI ui;
+
+    private JLabel titleLabel;
+    private JLabel descriptionLabel;
 
     public WelcomeScreen(InstallerUI ui) {
         this.ui = ui;
@@ -22,6 +26,16 @@ public class WelcomeScreen implements Screen {
 
     public InstallerUI getUi() {
         return ui;
+    }
+
+    @Override
+    protected void updateTitle(String titleText) {
+        titleLabel.setText(titleText);
+    }
+
+    @Override
+    protected void updateDescription(String descriptionText) {
+        descriptionLabel.setText(descriptionText);
     }
 
     /**
@@ -32,7 +46,7 @@ public class WelcomeScreen implements Screen {
         root.setBorder(new EmptyBorder(20, 20, 20, 20));
         root.setLayout(new BoxLayout(root, BoxLayout.Y_AXIS));
         
-        JLabel titleLabel = new JLabel("Install " + ui.getApp().getConfig().getModpackName());
+        titleLabel = new JLabel("[title]");
         titleLabel.setFont(new Font("Tahoma", Font.BOLD, 21));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         root.add(titleLabel);
@@ -40,7 +54,7 @@ public class WelcomeScreen implements Screen {
         Component rigidArea = Box.createRigidArea(new Dimension(20, 20));
         root.add(rigidArea);
         
-        JLabel descriptionLabel = new JLabel("Please close the Minecraft Launcher before proceeding.");
+        descriptionLabel = new JLabel("description");
         descriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         root.add(descriptionLabel);
         
@@ -52,7 +66,7 @@ public class WelcomeScreen implements Screen {
         root.add(startButton);
 
         startButton.addActionListener(a -> ui.openLauncherFolderSelect());
-
+        setParam(InstallerApp.getInstance().getConfig().getModpackName());
         return root;
     }
 }

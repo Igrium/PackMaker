@@ -12,6 +12,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import com.igrium.packmaker.common.InstallerConfig.ScreenConfig;
+
 import java.awt.Font;
 
 import java.awt.BorderLayout;
@@ -27,16 +29,21 @@ import javax.swing.JFileChooser;
 
 import java.awt.FlowLayout;
 
-public abstract class AbstractFolderSelectScreen implements Screen {
+public abstract class AbstractFolderSelectScreen extends AbstractInstallerScreen implements Screen {
 	private JTextField textField;
     private JButton nextButton;
     private JPanel root;
 
-    protected abstract String getTitle();
-    protected abstract String getDescription();
+    private JLabel titleLabel;
+    private JLabel descriptionLabel;
+
+    protected abstract String getDefaultTitle();
+    protected abstract String getDefaultDescription();
+
     protected abstract void onSubmit(File folder);
 
     protected abstract void goBack();
+
 
     public JTextField getTextField() {
         return textField;
@@ -44,6 +51,16 @@ public abstract class AbstractFolderSelectScreen implements Screen {
 
     public JPanel getRoot() {
         return root;
+    }
+
+    @Override
+    protected void updateTitle(String titleText) {
+        titleLabel.setText(titleText);
+    }
+
+    @Override
+    protected void updateDescription(String descriptionText) {
+        descriptionLabel.setText(descriptionText);
     }
 
     /**
@@ -58,11 +75,11 @@ public abstract class AbstractFolderSelectScreen implements Screen {
         root.add(topPanel, BorderLayout.NORTH);
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
         
-        JLabel titleLabel = new JLabel(getTitle());
+        titleLabel = new JLabel(getDefaultTitle());
         titleLabel.setFont(new Font("Tahoma", Font.PLAIN, 21));
         topPanel.add(titleLabel);
         
-        JLabel descriptionLabel = new JLabel(getDescription());
+        descriptionLabel = new JLabel(getDefaultDescription());
         topPanel.add(descriptionLabel);
         
         JSeparator separator = new JSeparator();
@@ -154,7 +171,7 @@ public abstract class AbstractFolderSelectScreen implements Screen {
 
     protected void browse() {
         JFileChooser fc = new JFileChooser(textField.getText());
-        fc.setDialogTitle(getTitle());
+        fc.setDialogTitle(getDefaultTitle());
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fc.showOpenDialog(root);
         if (fc.getSelectedFile() != null) {
@@ -168,5 +185,10 @@ public abstract class AbstractFolderSelectScreen implements Screen {
 
     public void setFolder(File folder) {
         textField.setText(folder.getAbsolutePath());
+    }
+
+    public void setFromConfig(ScreenConfig config) {
+        setTitleTemplate(config.getHeader());
+        setDescriptionTemplate(config.getDescription());
     }
 }

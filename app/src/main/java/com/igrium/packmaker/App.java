@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
+import com.igrium.packmaker.common.InstallerConfig;
 import com.igrium.packmaker.common.pack.ModpackProvider;
 import com.igrium.packmaker.common.util.HttpException;
 import com.igrium.packmaker.exporter.Exporter;
@@ -176,22 +177,26 @@ public class App extends Application {
 
         File file = fileChooser.showSaveDialog(getPrimaryStage());
         if (file != null) {
+            InstallerConfig config = new InstallerConfig();
+            config.setModpackName(name);
+            mainUI.getConfigEditorController().applyConfig(config);
+
             if (!file.getName().endsWith(".jar")) {
                 file = new File(file.getAbsolutePath() + ".jar");
             }
-            return doExport(file, provider, name);
+            return doExport(file, provider, config);
         } else {
             return CompletableFuture.completedFuture(null);
         }
     }
 
 
-    public CompletableFuture<?> doExport(File target, ModpackProvider provider, String name) {
+    public CompletableFuture<?> doExport(File target, ModpackProvider provider, InstallerConfig config) {
         root.setDisable(true);
         
         return CompletableFuture.runAsync(() -> {
             try(BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(target))) {
-                new Exporter(installerJar).export(out, name, provider);
+                new Exporter(installerJar).export(out, provider, config);
                 
             } catch (Exception e) {
                 throw new CompletionException(e);

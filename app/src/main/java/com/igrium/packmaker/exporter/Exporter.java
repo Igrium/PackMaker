@@ -32,9 +32,7 @@ public class Exporter {
         return templateUrl;
     }
 
-    public void export(OutputStream out, String mopdpackName, ModpackProvider modpack) throws Exception {
-        InstallerConfig config = new InstallerConfig();
-        config.setModpackName(mopdpackName);
+    public void export(OutputStream out, ModpackProvider modpack, InstallerConfig config) throws Exception {
 
         File modpackFile = null;
         if (modpack instanceof ModrinthPackProvider modrinth) {

@@ -10,11 +10,18 @@ public class MainUI {
     @FXML
     private Parent sidebar;
 
+    @FXML
+    private ConfigEditor configEditorController;
+
     public SideBar getSidebarController() {
         return sidebarController;
     }
 
     public Parent getSidebar() {
         return sidebar;
+    }
+
+    public ConfigEditor getConfigEditorController() {
+        return configEditorController;
     }
 }

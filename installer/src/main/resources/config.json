@@ -1,5 +1,21 @@
 {
-    "packSource": "MODRINTH",
-    "modrinthId": "LvvmEhPB",
-    "modpackName": "Simply Optimized"
+  "packSource": "MODRINTH",
+  "modrinthId": "o2vWer8c",
+  "modpackName": "Simply Optimized",
+  "welcomeScreen": {
+    "header": "Install %s.",
+    "description": "Please close the Minecraft Launcher before proceeding."
+  },
+  "gameDirScreen": {
+    "header": "Where does your game go?",
+    "description": "I put custom stuff on this screen hahahahahahaha!"
+  },
+  "launcherDirScreen": {
+    "header": "Select Installation Directory",
+    "description": "Please locate the directory in which the Minecraft Launcher is installed."
+  },
+  "completeScreen": {
+    "header": "Installation Complete!",
+    "description": "A profile has been created in your launcher called \u0027%s\u0027."
+  }
 }

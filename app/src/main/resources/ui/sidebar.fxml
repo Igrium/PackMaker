@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="369.0" spacing="10.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.igrium.packmaker.ui.SideBar">
+<VBox fx:id="root" prefHeight="600.0" prefWidth="369.0" spacing="10.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.igrium.packmaker.ui.SideBar">
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
    </padding>
@@ -43,17 +43,17 @@
          <children>
             <Label alignment="CENTER" maxHeight="1.7976931348623157E308" text="MrPack File" />
             <TextField fx:id="localFileField" HBox.hgrow="ALWAYS" />
-            <Button mnemonicParsing="false" onAction="#browseFile" text="Browse" />
+            <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#browseFile" text="Browse" />
          </children>
       </HBox>
       <Separator prefWidth="200.0" />
       <HBox spacing="10.0" VBox.vgrow="NEVER">
          <children>
-            <Button mnemonicParsing="false" onAction="#refresh" text="Refresh Mod Info" />
-            <Button fx:id="showInBrowserButton" disable="true" mnemonicParsing="false" onAction="#showInBrowser" text="Show in Browser" />
+            <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#refresh" text="Refresh Mod Info" />
+            <Button fx:id="showInBrowserButton" disable="true" minWidth="-Infinity" mnemonicParsing="false" onAction="#showInBrowser" text="Show in Browser" />
          </children>
       </HBox>
-      <GridPane>
+      <GridPane minHeight="-Infinity">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
           <ColumnConstraints hgrow="SOMETIMES" />

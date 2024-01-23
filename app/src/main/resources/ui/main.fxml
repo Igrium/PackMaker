@@ -4,6 +4,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -49,9 +50,14 @@
       </menus>
     </MenuBar>
       <BorderPane VBox.vgrow="ALWAYS">
-         <right>
-            <fx:include fx:id="sidebar" maxHeight="1.7976931348623157E308" source="sidebar.fxml" />
-         </right>
+         <center>
+            <SplitPane dividerPositions="0.6517996870109546" minHeight="0.0" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <items>
+                  <fx:include fx:id="configEditor" source="configEditor.fxml" />
+                  <fx:include fx:id="sidebar" maxHeight="1.7976931348623157E308" source="sidebar.fxml" />
+               </items>
+            </SplitPane>
+         </center>
       </BorderPane>
   </children>
 </VBox>

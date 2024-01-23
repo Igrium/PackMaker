@@ -17,12 +17,12 @@ public class GameFolderSelectScreen extends AbstractFolderSelectScreen {
     }
 
     @Override
-    protected String getTitle() {
+    protected String getDefaultTitle() {
         return "Select Game Directory";
     }
 
     @Override
-    protected String getDescription() {
+    protected String getDefaultDescription() {
         return "This is the folder where your game-specific files are stored (worlds, etc.)";
     }
 
