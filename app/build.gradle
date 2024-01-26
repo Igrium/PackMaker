@@ -6,11 +6,24 @@
  * User Manual available at https://docs.gradle.org/7.6/userguide/building_java_projects.html
  */
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
+    }
+}
+
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.1.0'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+    id 'edu.sc.seis.launch4j' version '3.0.5'
 }
+
+apply plugin : 'com.github.johnrengelman.shadow'
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -36,21 +49,18 @@ processResources {
     dependsOn(':installer:build')
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
     from project(':installer').buildDir.toString() + '/libs/installer.jar'
+    rename { filename -> filename.replace('.jar', '.jar.packed') }
 }
 
-def entrypoint = 'com.igrium.packmaker.App'
+def entrypoint = 'com.igrium.packmaker.Launcher'
+mainClassName = entrypoint
 
 application {
     // Define the main class for the application.
     mainClass = entrypoint
 }
 
-// jar {
-//     manifest {
-//         attributes "Main-Class": entrypoint
-//     }
-
-//     from {
-//         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-//     }
-// }
+launch4j {
+    mainClassName = entrypoint;
+    // jarTask = project.tasks.shadowJar;
+}

@@ -37,10 +37,6 @@ public class App extends Application {
         return instance;
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     private URL installerJar;
 
     private MainUI mainUI;
@@ -69,7 +65,7 @@ public class App extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        installerJar = getClass().getResource("/installer.jar");
+        installerJar = getClass().getResource("/installer.jar.packed");
         if (installerJar == null) {
             System.err.println("Installer jar not found. Installer export will not work.");
             showNoInstallerError();
