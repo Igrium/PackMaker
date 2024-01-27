@@ -28,13 +28,13 @@ If the source is set to Modrinth, a version id is required in the field marked "
 
 If you're unsure where to find the version ID, click "Browse" and use the newly-opened window to locate the desired version.
 
-![Version selection window](img/program2.png)
+![Version selection window](img/program2.PNG)
 
 > The version selection window
 
 Once you're ready to export the installer, click the "Export" near the bottom. This will open the "export window", where you will select the target file and the export type.
 
-![Export window](img/program3.png)
+![Export window](img/program3.PNG)
 
 > The export window
 
