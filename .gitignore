@@ -131,5 +131,5 @@ local.properties
 .vscode/
 
 # Will be copied from installer build dir.
-app/src/main/resources/installer.jar
-app/src/main/resources/installer.jar.packed
+packmaker/src/main/resources/installer.jar
+packmaker/src/main/resources/installer.jar.packed
