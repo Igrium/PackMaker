@@ -132,3 +132,4 @@ local.properties
 
 # Will be copied from installer build dir.
 app/src/main/resources/installer.jar
+app/src/main/resources/installer.jar.packed

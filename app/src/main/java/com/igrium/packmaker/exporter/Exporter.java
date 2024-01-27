@@ -20,6 +20,21 @@ import com.igrium.packmaker.common.pack.ModrinthPackProvider;
 import com.igrium.packmaker.mrpack.MrPack;
 
 public class Exporter {
+    public static enum ExportType {
+        JAR(".jar"),
+        EXE(".exe");
+
+        private final String extension;
+
+        private ExportType(String extension) {
+            this.extension = extension;
+        }
+
+        public String getExtension() {
+            return extension;
+        }
+    }
+
     private final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     private final URL templateUrl;
@@ -32,7 +47,7 @@ public class Exporter {
         return templateUrl;
     }
 
-    public void export(OutputStream out, ModpackProvider modpack, InstallerConfig config) throws Exception {
+    public void export(OutputStream out, ExportType exportType, ModpackProvider modpack, InstallerConfig config) throws Exception {
 
         File modpackFile = null;
         if (modpack instanceof ModrinthPackProvider modrinth) {

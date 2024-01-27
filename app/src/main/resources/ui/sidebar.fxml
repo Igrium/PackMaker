@@ -73,7 +73,7 @@
          </children>
       </GridPane>
       <Pane VBox.vgrow="ALWAYS" />
-      <ButtonBar prefHeight="40.0" prefWidth="200.0">
+      <ButtonBar prefWidth="200.0">
         <buttons>
           <Button fx:id="exportButton" defaultButton="true" disable="true" mnemonicParsing="false" onAction="#export" text="Export" />
         </buttons>

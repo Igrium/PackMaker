@@ -16,7 +16,9 @@ import com.igrium.packmaker.common.InstallerConfig;
 import com.igrium.packmaker.common.pack.ModpackProvider;
 import com.igrium.packmaker.common.util.HttpException;
 import com.igrium.packmaker.exporter.Exporter;
+import com.igrium.packmaker.exporter.Exporter.ExportType;
 import com.igrium.packmaker.mrpack.MrPack;
+import com.igrium.packmaker.ui.ExportWindow;
 import com.igrium.packmaker.ui.MainUI;
 
 import javafx.application.Application;
@@ -26,9 +28,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.FileChooser.ExtensionFilter;
 
 public class App extends Application {
     private static App instance;
@@ -62,6 +62,7 @@ public class App extends Application {
         this.primaryStage = primaryStage;
 
         Scene scene = initUi();
+        primaryStage.setTitle("Pack Maker");
         primaryStage.setScene(scene);
         primaryStage.show();
 
@@ -161,29 +162,45 @@ public class App extends Application {
         alert.show();
     }
 
-    public CompletableFuture<?> export(ModpackProvider provider, String name) {
+    // public CompletableFuture<?> export(ModpackProvider provider, String name) {
+    //     if (installerJar == null) {
+    //         showNoInstallerError();
+    //         return CompletableFuture.failedFuture(new IllegalStateException("No installer"));
+    //     }
+
+    //     FileChooser fileChooser = new FileChooser();
+    //     fileChooser.setTitle("Export installer");
+    //     fileChooser.getExtensionFilters().add(new ExtensionFilter("Java Executables", "*.jar"));
+
+    //     File file = fileChooser.showSaveDialog(getPrimaryStage());
+    //     if (file != null) {
+    //         InstallerConfig config = new InstallerConfig();
+    //         config.setModpackName(name);
+    //         mainUI.getConfigEditorController().applyConfig(config);
+
+    //         if (!file.getName().endsWith(".jar")) {
+    //             file = new File(file.getAbsolutePath() + ".jar");
+    //         }
+    //         return doExport(file, provider, config);
+    //     } else {
+    //         return CompletableFuture.completedFuture(null);
+    //     }
+    // }
+
+    public void export(ModpackProvider provider, String name) {
         if (installerJar == null) {
             showNoInstallerError();
-            return CompletableFuture.failedFuture(new IllegalStateException("No installer"));
+            return;
         }
 
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Export installer");
-        fileChooser.getExtensionFilters().add(new ExtensionFilter("Java Executables", "*.jar"));
-
-        File file = fileChooser.showSaveDialog(getPrimaryStage());
-        if (file != null) {
+        ExportWindow exportWindow = ExportWindow.open(primaryStage);
+        exportWindow.getExportEvent().addListener((target, type) -> {
             InstallerConfig config = new InstallerConfig();
             config.setModpackName(name);
             mainUI.getConfigEditorController().applyConfig(config);
 
-            if (!file.getName().endsWith(".jar")) {
-                file = new File(file.getAbsolutePath() + ".jar");
-            }
-            return doExport(file, provider, config);
-        } else {
-            return CompletableFuture.completedFuture(null);
-        }
+            doExport(target, provider, config);
+        });
     }
 
 
@@ -192,7 +209,7 @@ public class App extends Application {
         
         return CompletableFuture.runAsync(() -> {
             try(BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(target))) {
-                new Exporter(installerJar).export(out, provider, config);
+                new Exporter(installerJar).export(out, ExportType.JAR, provider, config);
                 
             } catch (Exception e) {
                 throw new CompletionException(e);
