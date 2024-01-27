@@ -7,7 +7,7 @@
  * in the user manual at https://docs.gradle.org/7.6/userguide/multi_project_builds.html
  */
 
-rootProject.name = 'packmaker'
+rootProject.name = 'packmaker-root'
+include('packmaker')
 include('common')
-include('app')
 include('installer')

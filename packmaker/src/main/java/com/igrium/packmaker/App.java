@@ -63,7 +63,7 @@ public class App extends Application {
         this.primaryStage = primaryStage;
 
         Scene scene = initUi();
-        primaryStage.setTitle("Pack Maker");
+        primaryStage.setTitle("Packmaker");
         primaryStage.setScene(scene);
         primaryStage.show();
 
