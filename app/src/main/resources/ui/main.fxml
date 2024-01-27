@@ -4,11 +4,11 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.igrium.packmaker.ui.MainUI">
+<VBox prefHeight="480.0" prefWidth="860.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.igrium.packmaker.ui.MainUI">
   <children>
       <BorderPane VBox.vgrow="ALWAYS">
          <center>
-            <SplitPane dividerPositions="0.6517996870109546" minHeight="0.0" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <SplitPane dividerPositions="0.5699300699300699" minHeight="0.0" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <items>
                   <fx:include fx:id="configEditor" source="configEditor.fxml" />
                   <fx:include fx:id="sidebar" maxHeight="1.7976931348623157E308" source="sidebar.fxml" />
