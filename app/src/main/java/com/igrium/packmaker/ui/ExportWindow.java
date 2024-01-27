@@ -21,6 +21,8 @@ import javafx.stage.FileChooser.ExtensionFilter;
 
 public final class ExportWindow {
 
+    private static String lastText;
+
     public static interface ExportEvent {
         public void onExport(File file, ExportType exportType);
     }
@@ -71,8 +73,13 @@ public final class ExportWindow {
         exeButton.setUserData(ExportType.EXE);
         jarButton.setUserData(ExportType.JAR);
 
+        if (lastText != null) {
+            targetFileField.setText(lastText);
+        }
+
         exportType.selectedToggleProperty().addListener(e -> updateFileExtension());
         targetFileField.focusedProperty().addListener((prop, oldVal, newVal) -> updateFileExtension());
+        targetFileField.textProperty().addListener((prop, oldVal, newVal) -> lastText = newVal);
     }
 
     public File getSelectedFile() {

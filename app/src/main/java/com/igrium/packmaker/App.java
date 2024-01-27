@@ -38,6 +38,7 @@ public class App extends Application {
     }
 
     private URL installerJar;
+    private URL bootstrap;
 
     private MainUI mainUI;
     private Parent root;
@@ -71,6 +72,8 @@ public class App extends Application {
             System.err.println("Installer jar not found. Installer export will not work.");
             showNoInstallerError();
         }
+
+        bootstrap = getClass().getResource("/bootstrap.exe");
     }
 
     public void showNoInstallerError() {
@@ -199,17 +202,17 @@ public class App extends Application {
             config.setModpackName(name);
             mainUI.getConfigEditorController().applyConfig(config);
 
-            doExport(target, provider, config);
+            doExport(target, type, provider, config);
         });
     }
 
 
-    public CompletableFuture<?> doExport(File target, ModpackProvider provider, InstallerConfig config) {
+    public CompletableFuture<?> doExport(File target, ExportType exportType, ModpackProvider provider, InstallerConfig config) {
         root.setDisable(true);
         
         return CompletableFuture.runAsync(() -> {
             try(BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(target))) {
-                new Exporter(installerJar).export(out, ExportType.JAR, provider, config);
+                new Exporter(installerJar, bootstrap).export(out, exportType, provider, config);
                 
             } catch (Exception e) {
                 throw new CompletionException(e);

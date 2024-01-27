@@ -7,10 +7,10 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 
 <VBox fx:id="root" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.igrium.packmaker.ui.ExportWindow">
    <children>
@@ -32,8 +32,15 @@
                <toggleGroup>
                   <ToggleGroup fx:id="exportType" />
                </toggleGroup>
+               <tooltip>
+                  <Tooltip text="A program that can be executed natively on any Windows system" />
+               </tooltip>
             </RadioButton>
-            <RadioButton fx:id="jarButton" mnemonicParsing="false" text="Executable Jar (.jar)" toggleGroup="$exportType" />
+            <RadioButton fx:id="jarButton" mnemonicParsing="false" text="Universal Jar (.jar)" toggleGroup="$exportType">
+               <tooltip>
+                  <Tooltip text="A jar file that will run on any operating system, provided Java is properly installed." />
+               </tooltip></RadioButton>
+            <Label text="Native EXE Bootstrapper by Fabric Loader" textFill="#7f7f7f" />
          </children>
          <padding>
             <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />

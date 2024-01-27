@@ -6,7 +6,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 public final class ScreenConfigEditor {
@@ -38,14 +37,14 @@ public final class ScreenConfigEditor {
     }
 
     @FXML
-    private TextArea descriptionTextArea;
+    private TextField descriptionTextField;
 
-    public TextArea getDescriptionTextArea() {
-        return descriptionTextArea;
+    public TextField getDescriptionTextField() {
+        return descriptionTextField;
     }
     
     public StringProperty descriptionProperty() {
-        return descriptionTextArea.textProperty();
+        return descriptionTextField.textProperty();
     }
 
     private final StringProperty defaultHeaderProperty = new SimpleStringProperty();
@@ -79,7 +78,7 @@ public final class ScreenConfigEditor {
     @FXML
     public void reset() {
         headerTextField.setText(getDefaultHeader());
-        descriptionTextArea.setText(getDefaultDescription());
+        descriptionTextField.setText(getDefaultDescription());
     }
 
     /**
@@ -89,7 +88,7 @@ public final class ScreenConfigEditor {
      */
     public ScreenConfig applyConfig(ScreenConfig dest) {
         dest.setHeader(headerTextField.getText());
-        dest.setDescription(descriptionTextArea.getText());
+        dest.setDescription(descriptionTextField.getText());
         return dest;
     }
 

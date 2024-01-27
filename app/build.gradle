@@ -47,7 +47,7 @@ dependencies {
 
 processResources {
     dependsOn(':installer:build')
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from project(':installer').buildDir.toString() + '/libs/installer.jar'
     rename { filename -> filename.replace('.jar', '.jar.packed') }
 }

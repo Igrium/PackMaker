@@ -38,16 +38,28 @@ public class Exporter {
     private final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     private final URL templateUrl;
+    private final URL bootstrapUrl;
 
-    public Exporter(URL templateUrl) {
+    public Exporter(URL templateUrl, URL bootstrapUrl) {
         this.templateUrl = templateUrl;
+        this.bootstrapUrl = bootstrapUrl;
     }
 
     public URL getTemplateUrl() {
         return templateUrl;
     }
 
+    public URL getBootstrapUrl() {
+        return bootstrapUrl;
+    }
+
     public void export(OutputStream out, ExportType exportType, ModpackProvider modpack, InstallerConfig config) throws Exception {
+
+        if (exportType == ExportType.EXE && bootstrapUrl != null) {
+            try(BufferedInputStream bootstrap = new BufferedInputStream(bootstrapUrl.openStream())) {
+                bootstrap.transferTo(out);
+            }
+        } 
 
         File modpackFile = null;
         if (modpack instanceof ModrinthPackProvider modrinth) {
