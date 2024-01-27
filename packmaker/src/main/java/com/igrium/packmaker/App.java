@@ -227,7 +227,7 @@ public class App extends Application {
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setTitle("Error exporting modpack.");
                 alert.setHeaderText("Error exporting modpack!");
-                alert.setContentText(ex.getMessage());
+                alert.setContentText(ex.toString());
                 ex.printStackTrace();
                 alert.show();
 

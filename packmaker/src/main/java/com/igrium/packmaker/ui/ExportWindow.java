@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
@@ -69,6 +70,9 @@ public final class ExportWindow {
     private RadioButton jarButton;
 
     @FXML
+    private Button exportButton;
+
+    @FXML
     protected void initialize() {
         exeButton.setUserData(ExportType.EXE);
         jarButton.setUserData(ExportType.JAR);
@@ -80,6 +84,9 @@ public final class ExportWindow {
         exportType.selectedToggleProperty().addListener(e -> updateFileExtension());
         targetFileField.focusedProperty().addListener((prop, oldVal, newVal) -> updateFileExtension());
         targetFileField.textProperty().addListener((prop, oldVal, newVal) -> lastText = newVal);
+        targetFileField.textProperty().addListener((prop, oldVal, newVal) -> evalExportButton());
+
+        evalExportButton();
     }
 
     public File getSelectedFile() {
@@ -102,6 +109,7 @@ public final class ExportWindow {
         chooser.setTitle("Export installer");
         File selected = getSelectedFile();
         if (selected != null) {
+            selected = selected.getAbsoluteFile();
             chooser.setInitialDirectory(selected.getParentFile());
             chooser.setInitialFileName(selected.getName());
         }
@@ -145,6 +153,10 @@ public final class ExportWindow {
     @FXML
     public void cancel() {
         cancelEvent.invoker().run();
+    }
+
+    private void evalExportButton() {
+        exportButton.setDisable(targetFileField.getText().isBlank());
     }
 
     public static ExportWindow open(Window owner) {
