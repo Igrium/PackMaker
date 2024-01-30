@@ -2,7 +2,6 @@ package com.igrium.packmaker.installer;
 
 import java.awt.CardLayout;
 import java.awt.Container;
-import java.io.File;
 import java.nio.file.Path;
 import java.util.concurrent.CompletionException;
 
@@ -100,8 +99,8 @@ public class InstallerUI {
 
     public void openLauncherFolderSelect() {
         if (!launcherFolderSelectScreen.getFolder().isDirectory()) {
-            File defaultPath = OSUtil.getDefaultLauncherPath();
-            if (defaultPath != null) launcherFolderSelectScreen.setFolder(defaultPath);
+            Path defaultPath = OSUtil.findDefaultLauncherPath();
+            if (defaultPath != null) launcherFolderSelectScreen.setFolder(defaultPath.toFile());
         }
 
         cards.show(contentPane, "selectLauncherFolder");
