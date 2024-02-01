@@ -34,7 +34,7 @@ public class GameFolderSelectScreen extends AbstractFolderSelectScreen {
         String twinGameFolderWarning = ui.getApp().getConfig().getTwinFolderWarning();
         if (Objects.equals(ui.getLauncherDir(), folder) && twinGameFolderWarning != null) {
             String[] buttons = { "Install Anyway", "Go Back" };
-
+            twinGameFolderWarning = this.formatString(twinGameFolderWarning);
             String warningText = "<html><body><p style='width: 200px;'>"+twinGameFolderWarning.replace("\n", "<br>");
 
             int input = JOptionPane.showOptionDialog(getRoot(), warningText, "Proceed with installation?",
