@@ -19,7 +19,7 @@ public class PackInstaller {
         List<CompletableFuture<?>> futures = new LinkedList<>();
         System.out.println("Installing modpack into " + gameDir);
         for (MrPackFileRef file : pack.getIndex().getFiles()) {
-            if (file.getEnvCompat().client() == EnvSupport.UNSUPPORTED) continue;
+            if (file.getEnv().client() == EnvSupport.UNSUPPORTED) continue;
 
             futures.add(CompletableFuture.runAsync(() -> {
                 System.out.println("Downloading " + file.getPath());

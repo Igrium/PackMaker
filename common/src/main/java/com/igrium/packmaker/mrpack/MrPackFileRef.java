@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.igrium.packmaker.mrpack.MrPack.EnvSide;
 import com.igrium.packmaker.mrpack.MrPack.EnvSupport;
 
 public final class MrPackFileRef {
@@ -39,16 +40,28 @@ public final class MrPackFileRef {
         this.hashes = hashes;
     }
 
-    public static record EnvCompat(EnvSupport client, EnvSupport server) {};
+    public static record EnvCompat(EnvSupport client, EnvSupport server) {
+        public boolean isSupported(EnvSide side) {
+            if (side == EnvSide.SERVER) return server != EnvSupport.UNSUPPORTED;
+            else if (side == EnvSide.CLIENT) return client != EnvSupport.UNSUPPORTED;
+            else throw new IllegalArgumentException("Unknown EnvSide: " + side);
+        }
 
-    private EnvCompat envCompat = new EnvCompat(EnvSupport.OPTIONAL, EnvSupport.OPTIONAL);
+        public boolean isRequired(EnvSide side) {
+            if (side == EnvSide.SERVER) return server == EnvSupport.REQUIRED;
+            else if (side == EnvSide.CLIENT) return client == EnvSupport.REQUIRED;
+            else throw new IllegalArgumentException("Unknown EnvSide: " + side);
+        }
+    };
 
-    public EnvCompat getEnvCompat() {
-        return envCompat;
+    private EnvCompat env = new EnvCompat(EnvSupport.OPTIONAL, EnvSupport.OPTIONAL);
+
+    public EnvCompat getEnv() {
+        return env;
     }
 
-    public void setEnvCompat(EnvCompat envSupport) {
-        this.envCompat = envSupport;
+    public void setEnv(EnvCompat envSupport) {
+        this.env = envSupport;
     }
 
     private List<URI> downloads = new ArrayList<>();

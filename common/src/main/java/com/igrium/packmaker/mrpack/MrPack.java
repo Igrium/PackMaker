@@ -131,12 +131,34 @@ public class MrPack implements Closeable {
     /**
      * Get all of the overrides that will be used on a given side.
      * @param side Side to use.
+     * @return Stream of all overrides.
+     */
+    public Stream<MrPackOverride> allOverrides(EnvSide side) {
+        Collection<MrPackOverride> localOverrides = side == EnvSide.CLIENT ? getClientOverrides() : getServerOverrides();
+        return Stream.concat(globalOverrides.stream(), localOverrides.stream());
+    }
+
+    /**
+     * Get all of the overrides that will be used on a given side.
+     * @param side Side to use.
      * @return Collection of all overrides.
      */
     public Collection<MrPackOverride> getAllOverrides(EnvSide side) {
-        Collection<MrPackOverride> localOverrides = side == EnvSide.CLIENT ? getClientOverrides() : getServerOverrides();
-        return Stream.concat(globalOverrides.stream(), localOverrides.stream()).toList();
+        return allOverrides(side).toList();
     }
+
+    /**
+     * Get a stream of all the filepaths contained in this pack, both references and overrides.
+     * @param side Side to use.
+     * @return Stream of all filepaths.
+     */
+    public Stream<String> getAllFilepaths(EnvSide side) {
+        Stream<MrPackFileRef> refs = index.getFiles().stream()
+                .filter(ref -> side == null || ref.getEnv().isSupported(side));
+        
+        return Stream.concat(refs.map(MrPackFileRef::getPath), allOverrides(side).map(MrPackOverride::getPath));
+    }
+
 
     public class MrPackOverride {
         private final ZipEntry entry;

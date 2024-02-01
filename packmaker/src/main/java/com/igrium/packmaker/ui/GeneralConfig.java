@@ -8,7 +8,7 @@ import javafx.scene.control.TextArea;
 
 public class GeneralConfig {
 
-    private String defaultTwinFolderWarning = "It is recommended to keep your game files (saves, resourcepacks, etc.) in a separate location for this modpack.";
+    private String defaultTwinFolderWarning = "In order to avoid conflicts with other modpacks, it is recommended to store your game files in a dedicated location.";
 
     public String getDefaultTwinFolderWarning() {
         return defaultTwinFolderWarning;
@@ -41,7 +41,7 @@ public class GeneralConfig {
     @FXML
     public void reset() {
         twinFolderWarningText.setText(defaultTwinFolderWarning);
-        twinFolderWarningCheck.setSelected(false);
+        twinFolderWarningCheck.setSelected(true);
     }
 
     public InstallerConfig applyConfig(InstallerConfig config) {
