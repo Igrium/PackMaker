@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="10.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.igrium.packmaker.ui.GeneralConfig">
+   <children>
+      <Label fx:id="headerLabel" text="General Config">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <CheckBox fx:id="twinFolderWarningCheck" mnemonicParsing="false" text="Warn if using launcher directory as game directory" />
+      <TextArea fx:id="twinFolderWarningText" prefHeight="64.0" promptText="Warning Text" text="It is recommended to keep your game files (saves, resourcepacks, etc.) in a separate location for this modpack. &#10;Failure to do so may corrupt your vanilla installation." wrapText="true" />
+      <AnchorPane>
+         <children>
+            <Button mnemonicParsing="false" onAction="#reset" text="Reset" AnchorPane.rightAnchor="0.0" />
+         </children>
+      </AnchorPane>
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</VBox>

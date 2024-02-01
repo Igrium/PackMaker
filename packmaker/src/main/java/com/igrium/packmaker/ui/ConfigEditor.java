@@ -9,6 +9,13 @@ import javafx.fxml.FXML;
 public class ConfigEditor {
 
     @FXML
+    private GeneralConfig generalConfigController;
+
+    public GeneralConfig getGeneralConfigController() {
+        return generalConfigController;
+    }
+
+    @FXML
     private ScreenConfigEditor welcomeScreenController;
 
     public ScreenConfigEditor getWelcomeScreenController() {
@@ -36,6 +43,8 @@ public class ConfigEditor {
         return completeScreenController;
     }
 
+
+
     private StringProperty packNameProperty;
 
     public String getPackName() {
@@ -52,19 +61,19 @@ public class ConfigEditor {
 
     @FXML
     private void initialize() {
-        welcomeScreenController.setHeaderLabel("Configure Welcome Screen");
+        welcomeScreenController.setHeaderLabel("Welcome Screen");
         welcomeScreenController.setDefaultHeader("Install %s.");
         welcomeScreenController.setDefaultDescription("Please close the Minecraft Launcher before proceeding.");
 
-        launcherDirScreenController.setHeaderLabel("Configure Launcher Directory Sceen");
+        launcherDirScreenController.setHeaderLabel("Launcher Directory Sceen");
         launcherDirScreenController.setDefaultHeader("Select Installation Directory");
         launcherDirScreenController.setDefaultDescription("Please locate the directory in which the Minecraft Launcher is installed.");
 
-        gameDirScreenController.setHeaderLabel("Configure Game Directory Screen");
+        gameDirScreenController.setHeaderLabel("Game Directory Screen");
         gameDirScreenController.setDefaultHeader("Select Game Directory");
         gameDirScreenController.setDefaultDescription("This is the folder where your game-specific files are stored (worlds, etc.)");
 
-        completeScreenController.setHeaderLabel("Configure Complete Screen");
+        completeScreenController.setHeaderLabel("Complete Screen");
         completeScreenController.setDefaultHeader("Installation Complete!");
         completeScreenController.setDefaultDescription("A profile has been created in your launcher called '%s'.");
         resetAll();
@@ -72,6 +81,7 @@ public class ConfigEditor {
 
     @FXML
     public void resetAll() {
+        generalConfigController.reset();
         welcomeScreenController.reset();
         launcherDirScreenController.reset();
         gameDirScreenController.reset();
@@ -79,6 +89,7 @@ public class ConfigEditor {
     }
 
     public InstallerConfig applyConfig(InstallerConfig config) {
+        generalConfigController.applyConfig(config);
         config.setWelcomeScreen(welcomeScreenController.applyConfig(new ScreenConfig()));
         config.setLauncherDirScreen(launcherDirScreenController.applyConfig(new ScreenConfig()));
         config.setGameDirScreen(gameDirScreenController.applyConfig(new ScreenConfig()));

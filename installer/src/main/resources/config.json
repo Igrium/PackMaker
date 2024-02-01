@@ -18,5 +18,5 @@
     "header": "Installation Complete!",
     "description": "A profile has been created in your launcher called \u0027%s\u0027."
   },
-  "twinGameFolderWarning": "You probably should change this lol"
+  "twinFolderWarning": "It is recommended to keep your game files (saves, resourcepacks, etc.) in a separate location for this modpack.\nFailure to do so may corrupt your vanilla installation."
 }

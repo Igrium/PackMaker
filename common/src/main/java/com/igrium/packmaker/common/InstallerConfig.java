@@ -45,22 +45,22 @@ public final class InstallerConfig {
      * If not <code>null</code>, this warning will be displayed if the user attempts
      * to use the launcher directory as the game directory.
      */
-    private String twinGameFolderWarning = null;
+    private String twinFolderWarning = null;
 
     /**
      * If not <code>null</code>, this warning will be displayed if the user attempts
      * to use the launcher directory as the game directory.
      */
-    public String getTwinGameFolderWarning() {
-        return twinGameFolderWarning;
+    public String getTwinFolderWarning() {
+        return twinFolderWarning;
     }
 
     /**
      * If not <code>null</code>, this warning will be displayed if the user attempts
      * to use the launcher directory as the game directory.
      */
-    public void setTwinGameFolderWarning(String twinGameFolderWarning) {
-        this.twinGameFolderWarning = twinGameFolderWarning;
+    public void setTwinFolderWarning(String twinGameFolderWarning) {
+        this.twinFolderWarning = twinGameFolderWarning;
     }
 
     public final static class ScreenConfig {
