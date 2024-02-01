@@ -5,6 +5,7 @@ import com.igrium.packmaker.common.InstallerConfig;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 
 public class GeneralConfig {
 
@@ -33,15 +34,32 @@ public class GeneralConfig {
     }
 
     @FXML
+    private CheckBox customProfileNameCheck;
+
+    public CheckBox getCustomProfileNameCheck() {
+        return customProfileNameCheck;
+    }
+
+    @FXML
+    private TextField customProfileName;
+
+    public TextField getCustomProfileName() {
+        return customProfileName;
+    }
+
+    @FXML
     private void initialize() {
         twinFolderWarningText.disableProperty().bind(twinFolderWarningCheck.selectedProperty().not());
         twinFolderWarningText.setText(defaultTwinFolderWarning);
+        
+        customProfileName.disableProperty().bind(customProfileNameCheck.selectedProperty().not());
     }
 
     @FXML
     public void reset() {
         twinFolderWarningText.setText(defaultTwinFolderWarning);
         twinFolderWarningCheck.setSelected(true);
+        customProfileName.setText("");
     }
 
     public InstallerConfig applyConfig(InstallerConfig config) {
@@ -49,6 +67,12 @@ public class GeneralConfig {
             config.setTwinFolderWarning(twinFolderWarningText.getText().strip());
         } else {
             config.setTwinFolderWarning(null);
+        }
+
+        if (customProfileNameCheck.isSelected() && !customProfileName.getText().isBlank()) {
+            config.setCustomProfileName(customProfileName.getText().strip());
+        } else {
+            config.setCustomProfileName(null);
         }
         return config;
     }

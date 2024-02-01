@@ -145,8 +145,11 @@ public class InstallerUI {
             ModpackProvider modpack = ModpackProvider.fromConfig(app.getConfig());
             Path launcherDir = launcherFolderSelectScreen.getFolder().toPath();
             Path gameDir = gameFolderSelectScreen.getFolder().toPath();
-            
-            String profile = Installer.install(installingScreen, launcherDir, gameDir, modpack);
+
+            String profileName = app.getConfig().getCustomProfileName();
+            if (profileName == null) profileName = app.getConfig().getModpackName();
+
+            String profile = Installer.install(installingScreen, profileName, launcherDir, gameDir, modpack);
             SwingUtilities.invokeLater(() -> openCompleteScreen(profile));
 
         } catch (Throwable e) {

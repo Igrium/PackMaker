@@ -63,6 +63,16 @@ public final class InstallerConfig {
         this.twinFolderWarning = twinGameFolderWarning;
     }
 
+    private String customProfileName;
+
+    public String getCustomProfileName() {
+        return customProfileName;
+    }
+
+    public void setCustomProfileName(String customProfileName) {
+        this.customProfileName = customProfileName;
+    }
+
     public final static class ScreenConfig {
         // For gson
         public ScreenConfig() {}
@@ -137,6 +147,8 @@ public final class InstallerConfig {
         setPackSource(other.getPackSource());
         setModrinthId(other.modrinthId);
         setModpackName(other.modpackName);
+        setTwinFolderWarning(other.twinFolderWarning);
+        setCustomProfileName(other.customProfileName);
         welcomeScreen.copyFrom(other.welcomeScreen);
         launcherDirScreen.copyFrom(other.launcherDirScreen);
         gameDirScreen.copyFrom(other.gameDirScreen);
