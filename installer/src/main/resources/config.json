@@ -3,7 +3,7 @@
   "modrinthId": "o2vWer8c",
   "modpackName": "Simply Optimized",
   "welcomeScreen": {
-    "header": "Install %s.",
+    "header": "Install {modpack}.",
     "description": "Please close the Minecraft Launcher before proceeding."
   },
   "gameDirScreen": {
@@ -16,7 +16,7 @@
   },
   "completeScreen": {
     "header": "Installation Complete!",
-    "description": "A profile has been created in your launcher called \u0027%s\u0027."
+    "description": "A profile has been created in your launcher called {profile}."
   },
   "twinFolderWarning": "It is recommended to keep your game files (saves, resourcepacks, etc.) in a separate location for this modpack.\nFailure to do so may corrupt your vanilla installation."
 }

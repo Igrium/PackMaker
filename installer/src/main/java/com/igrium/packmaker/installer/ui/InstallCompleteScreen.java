@@ -50,10 +50,6 @@ public class InstallCompleteScreen extends AbstractInstallerScreen implements Sc
         descriptionLabel.setText(descriptionText);
     }
 
-    public void setProfileName(String name) {
-        setParam(name);
-    }
-    
     /**
      * @wbp.parser.entryPoint
      */
@@ -91,7 +87,6 @@ public class InstallCompleteScreen extends AbstractInstallerScreen implements Sc
         JButton closeButton = new JButton("Close");
         closeButton.addActionListener(a -> close());
         bottomPanel.add(closeButton);
-        setProfileName("[unknown]");
 
         return root;
     }

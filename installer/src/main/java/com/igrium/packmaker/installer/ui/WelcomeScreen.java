@@ -11,7 +11,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import com.igrium.packmaker.installer.InstallerApp;
 import com.igrium.packmaker.installer.InstallerUI;
 
 public class WelcomeScreen extends AbstractInstallerScreen implements Screen {
@@ -66,7 +65,6 @@ public class WelcomeScreen extends AbstractInstallerScreen implements Screen {
         root.add(startButton);
 
         startButton.addActionListener(a -> ui.openLauncherFolderSelect());
-        setParam(InstallerApp.getInstance().getConfig().getModpackName());
         return root;
     }
 }

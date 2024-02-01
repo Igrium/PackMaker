@@ -12,8 +12,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import com.igrium.packmaker.common.InstallerConfig.ScreenConfig;
-
 import java.awt.Font;
 
 import java.awt.BorderLayout;
@@ -185,10 +183,5 @@ public abstract class AbstractFolderSelectScreen extends AbstractInstallerScreen
 
     public void setFolder(File folder) {
         textField.setText(folder.getAbsolutePath());
-    }
-
-    public void setFromConfig(ScreenConfig config) {
-        setTitleTemplate(config.getHeader());
-        setDescriptionTemplate(config.getDescription());
     }
 }

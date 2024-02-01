@@ -20,11 +20,13 @@ import com.igrium.packmaker.installer.ui.WelcomeScreen;
 import com.igrium.packmaker.installer.util.OSUtil;
 public class InstallerUI {
 
+
     private JFrame frame;
     private Container contentPane;
     private CardLayout cards;
 
     private final InstallerApp app;
+    private final Context context = new Context();
 
     public InstallerUI(InstallerApp app) {
         this.app = app;
@@ -34,12 +36,16 @@ public class InstallerUI {
         return app;
     }
 
+    public Context getContext() {
+        return context;
+    }
 
     /**
      * Initialize the contents of the frame.
      * @wbp.parser.entryPoint
      */
     public void open() {
+        context.modpackName = app.getConfig().getModpackName();
         SwingUtilities.invokeLater(() -> {
             frame = new JFrame();
             frame.setBounds(100, 100, 450, 300);
@@ -62,6 +68,12 @@ public class InstallerUI {
     private InstallingScreen installingScreen;
     private InstallCompleteScreen completeScreen;
     private InstallFailedScreen installFailedScreen;
+
+    private boolean isInitialized;
+
+    public boolean isInitialized() {
+        return isInitialized;
+    }
 
     private void init() {
         InstallerConfig config = InstallerApp.getInstance().getConfig();
@@ -87,6 +99,9 @@ public class InstallerUI {
 
         installFailedScreen = new InstallFailedScreen(this);
         frame.getContentPane().add(installFailedScreen.initialize(), "installFailed");
+
+        isInitialized = true;
+        context.update();
     }
     
     // private void setContent(Component content) {
@@ -152,7 +167,7 @@ public class InstallerUI {
     }
 
     public void openCompleteScreen(String profileName) {
-        completeScreen.setProfileName(profileName);
+        context.setProfileName(profileName);
         cards.show(contentPane, "complete");
     }
 
@@ -163,5 +178,36 @@ public class InstallerUI {
 
     public JFrame getFrame() {
         return frame;
+    }
+
+    public class Context {
+        private String modpackName;
+        
+        public String getModpackName() {
+            return modpackName;
+        }
+
+        public void setModpackName(String modpackName) {
+            this.modpackName = modpackName;
+            update();
+        }
+
+        private String profileName;
+
+        public String getProfileName() {
+            return profileName;
+        }
+
+        public void setProfileName(String profileName) {
+            this.profileName = profileName;
+            update();
+        }
+
+        protected void update() {
+            welcomeScreen.updateContext(this);
+            launcherFolderSelectScreen.updateContext(this);
+            gameFolderSelectScreen.updateContext(this);
+            completeScreen.updateContext(this);
+        }
     }
 }

@@ -3,19 +3,10 @@ package com.igrium.packmaker.installer.ui;
 import java.util.Objects;
 
 import com.igrium.packmaker.common.InstallerConfig.ScreenConfig;
+import com.igrium.packmaker.common.util.StringParamHolder;
+import com.igrium.packmaker.installer.InstallerUI;
 
-public abstract class AbstractInstallerScreen {
-    private String param;
-
-    public String getParam() {
-        return param;
-    }
-    
-    public void setParam(String param) {
-        this.param = param;
-        updateTitle(getTitle());
-        updateDescription(getDescription());
-    }
+public abstract class AbstractInstallerScreen extends StringParamHolder {
 
     private String titleTemplate = "";
 
@@ -24,7 +15,7 @@ public abstract class AbstractInstallerScreen {
     }
 
     public String getTitle() {
-        return titleTemplate.replaceAll("\\%s", param);
+        return formatString(titleTemplate);
     }
 
     public void setTitleTemplate(String titleTemplate) {
@@ -39,7 +30,7 @@ public abstract class AbstractInstallerScreen {
     }
 
     public String getDescription() {
-        return descriptionTemplate.replaceAll("\\%s", param);
+        return formatString(descriptionTemplate);
     }
 
     public void setDescriptionTemplate(String descriptionTemplate) {
@@ -54,4 +45,17 @@ public abstract class AbstractInstallerScreen {
         setTitleTemplate(config.getHeader());
         setDescriptionTemplate(config.getDescription());
     }
+
+    @Override
+    protected void onUpdate() {
+        updateTitle(getTitle());
+        updateDescription(getDescription());
+    }
+
+    public void updateContext(InstallerUI.Context context) {
+        setParam("modpack", context.getModpackName(), true);
+        setParam("profile", context.getProfileName(), true);
+        onUpdate();
+    }
+
 }

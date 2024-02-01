@@ -62,7 +62,7 @@ public class ConfigEditor {
     @FXML
     private void initialize() {
         welcomeScreenController.setHeaderLabel("Welcome Screen");
-        welcomeScreenController.setDefaultHeader("Install %s.");
+        welcomeScreenController.setDefaultHeader("Install {modpack}.");
         welcomeScreenController.setDefaultDescription("Please close the Minecraft Launcher before proceeding.");
 
         launcherDirScreenController.setHeaderLabel("Launcher Directory Sceen");
@@ -75,7 +75,7 @@ public class ConfigEditor {
 
         completeScreenController.setHeaderLabel("Complete Screen");
         completeScreenController.setDefaultHeader("Installation Complete!");
-        completeScreenController.setDefaultDescription("A profile has been created in your launcher called '%s'.");
+        completeScreenController.setDefaultDescription("A profile has been created in your launcher called '{profile}'.");
         resetAll();
     }
 
