@@ -41,6 +41,28 @@ public final class InstallerConfig {
         this.modpackName = Objects.requireNonNull(modpackName);
     }
 
+    /**
+     * If not <code>null</code>, this warning will be displayed if the user attempts
+     * to use the launcher directory as the game directory.
+     */
+    private String twinGameFolderWarning = null;
+
+    /**
+     * If not <code>null</code>, this warning will be displayed if the user attempts
+     * to use the launcher directory as the game directory.
+     */
+    public String getTwinGameFolderWarning() {
+        return twinGameFolderWarning;
+    }
+
+    /**
+     * If not <code>null</code>, this warning will be displayed if the user attempts
+     * to use the launcher directory as the game directory.
+     */
+    public void setTwinGameFolderWarning(String twinGameFolderWarning) {
+        this.twinGameFolderWarning = twinGameFolderWarning;
+    }
+
     public final static class ScreenConfig {
         // For gson
         public ScreenConfig() {}

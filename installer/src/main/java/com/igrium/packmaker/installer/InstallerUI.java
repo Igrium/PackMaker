@@ -2,6 +2,7 @@ package com.igrium.packmaker.installer;
 
 import java.awt.CardLayout;
 import java.awt.Container;
+import java.io.File;
 import java.nio.file.Path;
 import java.util.concurrent.CompletionException;
 
@@ -140,6 +141,14 @@ public class InstallerUI {
             }
             openInstallFailedScreen(e);
         }
+    }
+
+    public File getLauncherDir() {
+        return launcherFolderSelectScreen.getFolder();
+    }
+
+    public File getGameDir() {
+        return gameFolderSelectScreen.getFolder();
     }
 
     public void openCompleteScreen(String profileName) {

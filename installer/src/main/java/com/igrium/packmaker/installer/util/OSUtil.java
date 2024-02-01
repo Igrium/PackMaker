@@ -33,7 +33,7 @@ public class OSUtil {
         Path dir;
 
         if (OperatingSystem.CURRENT == OperatingSystem.WINDOWS && System.getenv("APPDATA") != null) {
-            dir = Paths.get(System.getProperty("APPDATA")).resolve(".minecraft");
+            dir = Paths.get(System.getenv("APPDATA")).resolve(".minecraft");
         } else {
             Path home = Paths.get(System.getProperty("user.home", "."));
 

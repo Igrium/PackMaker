@@ -17,5 +17,6 @@
   "completeScreen": {
     "header": "Installation Complete!",
     "description": "A profile has been created in your launcher called \u0027%s\u0027."
-  }
+  },
+  "twinGameFolderWarning": "You probably should change this lol"
 }
