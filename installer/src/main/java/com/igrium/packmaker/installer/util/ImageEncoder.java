@@ -13,6 +13,7 @@ public class ImageEncoder {
      * @return Base64 string.
      * @throws IOException If an IO exception occurs reading the stream.
      */
+    @Deprecated
     public static String encodeImage(InputStream stream) throws IOException {
         byte[] buffer = new byte[2048];
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -20,7 +21,7 @@ public class ImageEncoder {
         while ((readLength = stream.read(buffer, 0, 2048)) != -1) {
             out.write(buffer, 0, readLength);
         }
-
+        
         byte[] data = out.toByteArray();
         out.close();
         stream.close();

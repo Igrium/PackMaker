@@ -4,13 +4,13 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Base64;
 
 import com.google.gson.JsonObject;
 import com.igrium.packmaker.common.fabric.FabricWebApi;
 import com.igrium.packmaker.common.pack.ModpackProvider;
 import com.igrium.packmaker.installer.fabric.FabricInstaller;
 import com.igrium.packmaker.installer.modpack.PackInstaller;
-import com.igrium.packmaker.installer.util.ImageEncoder;
 import com.igrium.packmaker.installer.util.ProgressHandle;
 import com.igrium.packmaker.mrpack.MrPack;
 import com.igrium.packmaker.mrpack.MrPack.MrPackOverride;
@@ -62,7 +62,8 @@ public class Installer {
 
             if (override.getPath().contains("icon.png")) {
                 try(InputStream in = new BufferedInputStream(override.openStream())) {
-                    icon = ImageEncoder.encodeImage(in);
+                    String base64 = Base64.getEncoder().withoutPadding().encodeToString(in.readAllBytes());
+                    icon = "data:image/png;base64," + base64;
                 }
             }
         }
