@@ -2,6 +2,7 @@ package com.igrium.packmaker.ui;
 
 import com.igrium.packmaker.common.InstallerConfig;
 import com.igrium.packmaker.common.InstallerConfig.ScreenConfig;
+import com.igrium.packmaker.exporter.ExportConfig;
 
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
@@ -94,6 +95,11 @@ public class ConfigEditor {
         config.setLauncherDirScreen(launcherDirScreenController.applyConfig(new ScreenConfig()));
         config.setGameDirScreen(gameDirScreenController.applyConfig(new ScreenConfig()));
         config.setCompleteScreen(completeScreenController.applyConfig(new ScreenConfig()));
+        return config;
+    }
+
+    public ExportConfig applyConfig(ExportConfig config) {
+        generalConfigController.applyConfig(config);
         return config;
     }
 }

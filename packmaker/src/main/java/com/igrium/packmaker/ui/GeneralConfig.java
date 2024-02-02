@@ -1,6 +1,9 @@
 package com.igrium.packmaker.ui;
 
 import com.igrium.packmaker.common.InstallerConfig;
+import com.igrium.packmaker.common.pack.ModpackProvider;
+import com.igrium.packmaker.common.pack.ModrinthPackProvider;
+import com.igrium.packmaker.exporter.ExportConfig;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -48,6 +51,13 @@ public class GeneralConfig {
     }
 
     @FXML
+    private CheckBox bundleCheckBox;
+
+    public CheckBox getBundleCheckBox() {
+        return bundleCheckBox;
+    }
+
+    @FXML
     private void initialize() {
         twinFolderWarningText.disableProperty().bind(twinFolderWarningCheck.selectedProperty().not());
         twinFolderWarningText.setText(defaultTwinFolderWarning);
@@ -75,5 +85,19 @@ public class GeneralConfig {
             config.setCustomProfileName(null);
         }
         return config;
+    }
+
+    public ExportConfig applyConfig(ExportConfig config) {
+        return config.setBundlePack(bundleCheckBox.isSelected());
+    }
+
+    public void onUpdateModpackSource(ModpackProvider provider) {
+        if (provider instanceof ModrinthPackProvider) {
+            bundleCheckBox.setDisable(false);
+            bundleCheckBox.setSelected(false);
+        } else {
+            bundleCheckBox.setDisable(true);
+            bundleCheckBox.setSelected(true);
+        }
     }
 }

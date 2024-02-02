@@ -13,9 +13,9 @@ import java.util.zip.ZipOutputStream;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.igrium.packmaker.App.LoadedPack;
 import com.igrium.packmaker.common.InstallerConfig;
 import com.igrium.packmaker.common.InstallerConfig.PackSource;
-import com.igrium.packmaker.common.pack.ModpackProvider;
 import com.igrium.packmaker.common.pack.ModrinthPackProvider;
 import com.igrium.packmaker.mrpack.MrPack;
 
@@ -53,21 +53,21 @@ public class Exporter {
         return bootstrapUrl;
     }
 
-    public void export(OutputStream out, ExportType exportType, ModpackProvider modpack, InstallerConfig config) throws Exception {
+    public void export(OutputStream out, LoadedPack modpack, ExportConfig exportConfig, InstallerConfig installerConfig) throws Exception {
 
-        if (exportType == ExportType.EXE && bootstrapUrl != null) {
+        if (exportConfig.getExportType() == ExportType.EXE && bootstrapUrl != null) {
             try(BufferedInputStream bootstrap = new BufferedInputStream(bootstrapUrl.openStream())) {
                 bootstrap.transferTo(out);
             }
         } 
 
         File modpackFile = null;
-        if (modpack instanceof ModrinthPackProvider modrinth) {
-            config.setPackSource(PackSource.MODRINTH);
-            config.setModrinthId(modrinth.getVersionId());
+        if (modpack.provider() instanceof ModrinthPackProvider modrinth && !exportConfig.bundlePack()) {
+            installerConfig.setPackSource(PackSource.MODRINTH);
+            installerConfig.setModrinthId(modrinth.getVersionId());
         } else {
-            MrPack pack = modpack.downloadPack();
-            config.setPackSource(PackSource.INTERNAL);
+            MrPack pack = modpack.pack();
+            installerConfig.setPackSource(PackSource.INTERNAL);
             modpackFile = pack.getFile();
             pack.close();
         }
@@ -80,7 +80,7 @@ public class Exporter {
                 
                 if (entry.getName().equals("config.json")) {
                     Writer writer = new OutputStreamWriter(zip);
-                    writer.write(GSON.toJson(config));
+                    writer.write(GSON.toJson(installerConfig));
                     writer.flush();
                 } else {
                     in.transferTo(zip);

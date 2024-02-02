@@ -15,18 +15,22 @@ import java.util.concurrent.CompletionException;
 import com.igrium.packmaker.common.InstallerConfig;
 import com.igrium.packmaker.common.pack.ModpackProvider;
 import com.igrium.packmaker.common.util.HttpException;
+import com.igrium.packmaker.exporter.ExportConfig;
 import com.igrium.packmaker.exporter.Exporter;
-import com.igrium.packmaker.exporter.Exporter.ExportType;
 import com.igrium.packmaker.mrpack.MrPack;
 import com.igrium.packmaker.ui.ExportWindow;
 import com.igrium.packmaker.ui.MainUI;
+import com.igrium.packmaker.ui.SideBar.ModpackSource;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
@@ -55,6 +59,16 @@ public class App extends Application {
 
     public Stage getPrimaryStage() {
         return primaryStage;
+    }
+
+    /**
+     * The modpack source is mirrored in a property in the root app so that other UI
+     * elements (namely the config editor) can access
+     */
+    private final ObjectProperty<SingleSelectionModel<ModpackSource>> modpackSourceProperty = new SimpleObjectProperty<>();
+
+    public ObjectProperty<SingleSelectionModel<ModpackSource>> modpackSourceProperty() {
+        return modpackSourceProperty;
     }
 
     @Override
@@ -106,6 +120,7 @@ public class App extends Application {
     public void setCurrentPack(LoadedPack currentPack) {
         this.currentPack = currentPack;
         mainUI.getSidebarController().loadPackInfo(currentPack);
+        mainUI.getConfigEditorController().getGeneralConfigController().onUpdateModpackSource(currentPack.provider);
     }
 
     public void setCurrentPack(ModpackProvider provider, MrPack pack) {
@@ -165,31 +180,6 @@ public class App extends Application {
         alert.show();
     }
 
-    // public CompletableFuture<?> export(ModpackProvider provider, String name) {
-    //     if (installerJar == null) {
-    //         showNoInstallerError();
-    //         return CompletableFuture.failedFuture(new IllegalStateException("No installer"));
-    //     }
-
-    //     FileChooser fileChooser = new FileChooser();
-    //     fileChooser.setTitle("Export installer");
-    //     fileChooser.getExtensionFilters().add(new ExtensionFilter("Java Executables", "*.jar"));
-
-    //     File file = fileChooser.showSaveDialog(getPrimaryStage());
-    //     if (file != null) {
-    //         InstallerConfig config = new InstallerConfig();
-    //         config.setModpackName(name);
-    //         mainUI.getConfigEditorController().applyConfig(config);
-
-    //         if (!file.getName().endsWith(".jar")) {
-    //             file = new File(file.getAbsolutePath() + ".jar");
-    //         }
-    //         return doExport(file, provider, config);
-    //     } else {
-    //         return CompletableFuture.completedFuture(null);
-    //     }
-    // }
-
     public void export(ModpackProvider provider, String name) {
         if (installerJar == null) {
             showNoInstallerError();
@@ -202,17 +192,20 @@ public class App extends Application {
             config.setModpackName(name);
             mainUI.getConfigEditorController().applyConfig(config);
 
-            doExport(target, type, provider, config);
+            ExportConfig exportConfig = new ExportConfig().setExportType(type);
+            mainUI.getConfigEditorController().applyConfig(exportConfig);
+
+            doExport(target, provider, exportConfig, config);
         });
     }
 
 
-    public CompletableFuture<?> doExport(File target, ExportType exportType, ModpackProvider provider, InstallerConfig config) {
+    public CompletableFuture<?> doExport(File target, ModpackProvider provider, ExportConfig exportConfig, InstallerConfig config) {
         root.setDisable(true);
         
         return CompletableFuture.runAsync(() -> {
             try(BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(target))) {
-                new Exporter(installerJar, bootstrap).export(out, exportType, provider, config);
+                new Exporter(installerJar, bootstrap).export(out, currentPack, exportConfig, config);
                 
             } catch (Exception e) {
                 throw new CompletionException(e);

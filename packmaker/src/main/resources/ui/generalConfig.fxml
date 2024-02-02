@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -18,9 +19,14 @@
          </font>
       </Label>
       <CheckBox fx:id="twinFolderWarningCheck" mnemonicParsing="false" text="Warn if using launcher directory as game directory" />
-      <TextArea fx:id="twinFolderWarningText" prefHeight="64.0" promptText="Warning Text" text="It is recommended to keep your game files (saves, resourcepacks, etc.) in a separate location for this modpack. &#10;Failure to do so may corrupt your vanilla installation." wrapText="true" />
+      <TextArea fx:id="twinFolderWarningText" prefHeight="64.0" promptText="Warning Text" text="It is recommended to keep your game files (saves, resourcepacks, etc.) in a separate location for this modpack. Failure to do so may corrupt your vanilla installation." wrapText="true" />
       <CheckBox fx:id="customProfileNameCheck" mnemonicParsing="false" text="Use custom profile name" />
       <TextField fx:id="customProfileName" promptText="Custom Profile Name" />
+      <CheckBox fx:id="bundleCheckBox" mnemonicParsing="false" text="Bundle modpack with installer">
+         <tooltip>
+            <Tooltip text="If set. the modpack will be bundled with the installer rather than fetched from Modrinth at runtime." />
+         </tooltip>
+      </CheckBox>
       <AnchorPane>
          <children>
             <Button mnemonicParsing="false" onAction="#reset" text="Reset" AnchorPane.rightAnchor="0.0" />
